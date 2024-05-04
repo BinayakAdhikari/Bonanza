@@ -56,4 +56,8 @@ public class Player {
     public int getCoins() {
         return coins;
     }
+
+    public void addCoins(int i) {
+        coins += i;
+    }
 }

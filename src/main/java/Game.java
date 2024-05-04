@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class Game {
@@ -28,7 +29,7 @@ public class Game {
     }
 
     // Method to handle a player's turn
-    private void playTurn(Player player) {
+    void playTurn(Player player) {
         // Implement turn logic
         System.out.println("Playing turn for player .");
         // More detailed turn logic goes here
@@ -44,5 +45,17 @@ public class Game {
         int numPlayers = 4;  // Assuming a 4-player game for simplicity
         Game game = new Game(numPlayers);
         game.start();
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public Deck getDeck() {
+        return deck;
+    }
+
+    public boolean isGameOver() {
+        return isGameOver;
     }
 }
