@@ -6,6 +6,8 @@ public class Game {
     private List<Player> players = new ArrayList<>();
     private Deck deck = new Deck();
     private boolean isGameOver = false;
+    private int startingPlayer;
+    private Deck discardedDeck;
 
     // Constructor to initialize game with specified number of players
     public Game(int numPlayers) {
@@ -38,6 +40,12 @@ public class Game {
     // Method to determine and announce the winner (placeholder for demonstration)
     private void announceWinner() {
         System.out.println("Game Over. Winner is Player X.");
+    }
+
+    public  List<Card> addToDiscardedDeck(Card card){
+        List<Card> discardedCards = new ArrayList<>();
+        discardedCards.add(card);
+        return discardedCards;
     }
 
     // Main method as the entry point of the program

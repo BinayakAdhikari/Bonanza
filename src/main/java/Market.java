@@ -5,6 +5,9 @@ public class Market {
     // Holds cards available for trading
     private List<Card> turnOverCard;
 
+    // Holds player who participated in trade
+    private List<Player> traders;
+
     // Constructor initializes an empty trading area
     public Market() {
         turnOverCard = new ArrayList<>();
