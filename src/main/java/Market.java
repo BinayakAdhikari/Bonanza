@@ -2,36 +2,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Market {
-    // Holds cards available for trading
-    private List<Card> turnOverCard;
+    private List<Card> tradingArea = new ArrayList<>();
 
-    // Constructor initializes an empty trading area
-    public Market() {
-        turnOverCard = new ArrayList<>();
+    // Adds a card to the trading area
+    public void addCard(Card card) {
+        tradingArea.add(card);
     }
 
-    // Add cards to the trading area
-    public void addCards(List<Card> cards) {
-        turnOverCard.addAll(cards);
-    }
-
-    // Allow players to trade cards directly in the market
-    public boolean trade(Player playerGiving, Player playerReceiving, Card cardToTrade) {
-        // Check if the player actually has the card to trade
-        if (turnOverCard.contains(cardToTrade)) {
-            // Remove the card from the market and add it to the receiving player
-            turnOverCard.remove(cardToTrade);
-            playerReceiving.addCardToHand(cardToTrade);
-
-            // The player giving removes it from their hand (for simplicity, remove by object)
-            playerGiving.getHand().remove(cardToTrade);
-            return true; // Successful trade
+    // Trades a card between two players if the card exists in the trading area
+    public boolean tradeCard(Player giver, Player receiver, Card card) {
+        if (tradingArea.contains(card)) {
+            tradingArea.remove(card);
+            giver.getHand().remove(card);
+            receiver.addCardToHand(card);
+            return true; // Trade successful
         }
         return false; // Trade failed
     }
 
-    // Return the list of cards currently in the trading area
-    public List<Card> getTurnover() {
-        return turnOverCard;
+    // Gets all cards in the trading area
+    public List<Card> getTradingCards() {
+        return tradingArea;
     }
 }

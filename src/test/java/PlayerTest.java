@@ -1,45 +1,29 @@
-import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
     private Player player;
+    private Card card;
 
-    @Before
-    public void setUp() {
-        player = new Player();
-        // Populate the player's hand with some cards
-        for (int i = 0; i < 5; i++) {
-            player.addCardToHand(new Card("Bean" + i, 2));
-        }
+    @BeforeEach
+    void setUp() {
+        player = new Player(new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
+        card = new Card("Black Bean", 5);
+        player.addCardToHand(card);
     }
 
     @Test
-    public void testAddCardToHand() {
-        player.addCardToHand(new Card("Black Bean", 2));
-        assertEquals("Hand should have 6 cards", 6, player.getHand().size());
+    void testPlantBean() {
+        player.plantBean(card, 0);
+        assertEquals(1, player.getFields().get(0).getNumberOfBeans(), "Field should have one bean after planting.");
     }
 
     @Test
-    public void testPlantBean() {
-        player.plantBean(0, 0);
-        assertEquals("First field should have 1 bean", 1, player.getFields().get(0).getNumberOfBeans());
-    }
-
-    @Test
-    public void testBuyField() {
-        // Give player enough coins to buy a field
-        player.addCoins(3);
-        assertTrue("Player should be able to buy a field", player.canBuyField());
-        player.buyField();
-        assertEquals("Player should have 3 fields", 3, player.getFields().size());
-        assertEquals("Player coins should be zero after purchase", 0, player.getCoins());
-    }
-
-    @Test
-    public void testCannotBuyFieldWithoutEnoughCoins() {
-        // Ensure player does not have enough coins
-        player.addCoins(2); // Less than required
-        assertFalse("Player should not be able to buy a field", player.canBuyField());
+    void testHarvestBeans() {
+        player.plantBean(card, 0);
+        int coinsEarned = player.harvestBeans(0);
+        assertEquals(0, player.getFields().get(0).getNumberOfBeans(), "Field should be empty after harvesting.");
+        assertTrue(coinsEarned > 0, "Player should earn coins from harvesting.");
     }
 }

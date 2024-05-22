@@ -1,39 +1,34 @@
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class FieldTest {
     private Field field;
+    private Card card1;
+    private Card card2;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         field = new Field();
+        card1 = new Card("Blue Bean", 4);
+        card2 = new Card("Red Bean", 3);
     }
 
     @Test
-    public void testPlantBean() {
-        Card card = new Card("Black Bean", 2);
-        field.plantBean(card);
-        assertEquals("Field should have 1 bean", 1, field.getNumberOfBeans());
+    void testPlantBean() {
+        field.plantBean(card1);
+        assertTrue(field.getCards().contains(card1), "Field should contain the planted card.");
     }
 
     @Test
-    public void testHarvestBeans() {
-        field.plantBean(new Card("Black Bean", 2));
-
-        field.plantBean(new Card("Black Bean", 2));
+    void testHarvestBeans() {
+        field.plantBean(card1);
+        field.plantBean(card2);
         List<Card> harvested = field.harvestBeans();
-        assertEquals("Field should be empty after harvesting", 0, field.getNumberOfBeans());
-        assertEquals("Should harvest 2 beans", 2, harvested.size());
-    }
-
-    @Test
-    public void testGetNumberOfBeans() {
-        field.plantBean(new Card("Black Bean", 2));
-        field.plantBean(new Card("Black Bean", 3));
-        assertEquals("Field should have 2 beans", 2, field.getNumberOfBeans());
+        assertTrue(harvested.contains(card1) && harvested.contains(card2), "Harvested cards should contain all planted cards.");
+        assertEquals(0, field.getCards().size(), "Field should be empty after harvesting.");
     }
 }

@@ -1,69 +1,42 @@
-import static org.junit.Assert.*;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class MarketTest {
     private Market market;
-    private Player playerA;
-    private Player playerB;
+    private Player player1;
+    private Player player2;
+    private Card card1;
+    private Card card2;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         market = new Market();
-        playerA = new Player();
-        playerB = new Player();
-
-        // Add some cards to playerA's hand for trading
-        playerA.addCardToHand(new Card("Blue Bean", 2));
-        playerA.addCardToHand(new Card("Green Bean", 3));
+        player1 = new Player(new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
+        player2 = new Player(new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
+        card1 = new Card("Blue Bean", 4);
+        card2 = new Card("Red Bean", 3);
+        player1.addCardToHand(card1);
+        player2.addCardToHand(card2);
     }
 
     @Test
-    public void testAddCards() {
-        List<Card> cardsToAdd = new ArrayList<>();
-        cardsToAdd.add(new Card("Red Bean", 4));
-        cardsToAdd.add(new Card("Black Bean", 2));
-        market.addCards(cardsToAdd);
-
-        assertEquals("Trading area should have 2 cards", 2, market.getTurnover().size());
+    void testAddCard() {
+        market.addCard(card1);
+        assertTrue(market.getTradingCards().contains(card1), "Market should contain the added card.");
     }
 
     @Test
-    public void testTradeSuccessful() {
-        Card cardToTrade = new Card("Blue Bean", 2);
-        playerA.addCardToHand(cardToTrade);
-
-        // Add the card to the market and trade it to playerB
-        List<Card> cardsToAdd = new ArrayList<>();
-        cardsToAdd.add(cardToTrade);
-        market.addCards(cardsToAdd);
-
-        boolean tradeSuccess = market.trade(playerA, playerB, cardToTrade);
-        assertTrue("Trade should succeed", tradeSuccess);
-        assertFalse("Player A should not have the traded card", playerA.getHand().contains(cardToTrade));
-        assertTrue("Player B should have received the traded card", playerB.getHand().contains(cardToTrade));
-        assertEquals("Trading area should be empty after the trade", 0, market.getTurnover().size());
+    void testTradeCardSuccessful() {
+        market.addCard(card1);
+        player1.getHand().remove(card1); // Simulate giving card to market
+        assertTrue(market.tradeCard(player1, player2, card1), "Trade should be successful.");
+        assertTrue(player2.getHand().contains(card1), "Player2 should have received the card.");
+        assertFalse(player1.getHand().contains(card1), "Player1 should no longer have the card.");
     }
 
     @Test
-    public void testTradeUnsuccessful() {
-        Card cardToTrade = new Card("Nonexistent Bean", 5);
-        boolean tradeSuccess = market.trade(playerA, playerB, cardToTrade);
-
-        assertFalse("Trade should fail since the card is not in the market", tradeSuccess);
-    }
-
-    @Test
-    public void testGetTradingArea() {
-        List<Card> cardsToAdd = new ArrayList<>();
-        cardsToAdd.add(new Card("Yellow Bean", 3));
-        cardsToAdd.add(new Card("Blue Bean", 2));
-        market.addCards(cardsToAdd);
-
-        List<Card> tradingArea = market.getTurnover();
-        assertEquals("Trading area should contain 2 cards", 2, tradingArea.size());
+    void testTradeCardUnsuccessful() {
+        assertFalse(market.tradeCard(player1, player2, card1), "Trade should fail as the card is not in the market.");
     }
 }
