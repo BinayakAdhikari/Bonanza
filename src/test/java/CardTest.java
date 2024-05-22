@@ -1,14 +1,15 @@
-
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
+import static org.junit.jupiter.api.Assertions.*;
 
 public class CardTest {
+
+    // Test initialization of Card with proper attributes
     @Test
     public void testCardInitialization() {
         Card card = new Card("Blue Bean", 4);
-        assertEquals("Blue Bean", "Blue Bean", card.getBeanType());
-        assertEquals(4, 4, card.getBeanometer());
+
+        // Validate that the card attributes are initialized correctly
+        assertEquals("Blue Bean", card.getBeanType(), "Bean type should be 'Blue Bean'");
+        assertEquals(4, card.getBeanometer(), "Bean-o-meter should be 4");
     }
 }

@@ -23,6 +23,7 @@ public class FieldTest {
     @Test
     public void testHarvestBeans() {
         field.plantBean(new Card("Black Bean", 2));
+
         field.plantBean(new Card("Black Bean", 2));
         List<Card> harvested = field.harvestBeans();
         assertEquals("Field should be empty after harvesting", 0, field.getNumberOfBeans());

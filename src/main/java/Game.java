@@ -1,61 +1,54 @@
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Game {
-    private List<Player> players = new ArrayList<>();
-    private Deck deck = new Deck();
-    private boolean isGameOver = false;
+    private List<Player> players;
+    private Deck deck;
+    private boolean isGameOver;
 
-    // Constructor to initialize game with specified number of players
     public Game(int numPlayers) {
+        players = new ArrayList<>();
+        PlantingStrategy plantingStrategy = new SimplePlantingStrategy();
+        HarvestingStrategy harvestingStrategy = new SimpleHarvestingStrategy();
         for (int i = 0; i < numPlayers; i++) {
-            players.add(new Player());
+            players.add(new Player(plantingStrategy, harvestingStrategy));
+        }
+        deck = new Deck();
+        isGameOver = false;
+    }
+
+    public void playTurn(Player player) {
+        if (!player.getHand().isEmpty()) {
+            Card cardToPlant = player.getHand().remove(0);
+            player.plantBean(cardToPlant, 0);  // Plant in the first field
+        }
+
+        if (player.getFields().get(1).getNumberOfBeans() > 0) {
+            player.harvestBeans(1);
+        }
+
+        for (int i = 0; i < 3; i++) {
+            Card card = deck.draw();
+            if (card != null) {
+                player.addCardToHand(card);
+            }
         }
     }
 
-    // Method to start the game
-    public void start() {
+    public void startGame() {
         while (!isGameOver) {
             for (Player player : players) {
                 playTurn(player);
-                if (deck.getSize() == 0) {
+                if (deck.draw() == null) {
                     isGameOver = true;
                     break;
                 }
             }
         }
-        announceWinner();
     }
 
-    // Method to handle a player's turn
-    void playTurn(Player player) {
-        // Implement turn logic
-        System.out.println("Playing turn for player .");
-        // More detailed turn logic goes here
-    }
-
-    // Method to determine and announce the winner (placeholder for demonstration)
-    private void announceWinner() {
-        System.out.println("Game Over. Winner is Player X.");
-    }
-
-    // Main method as the entry point of the program
     public static void main(String[] args) {
-        int numPlayers = 4;  // Assuming a 4-player game for simplicity
-        Game game = new Game(numPlayers);
-        game.start();
-    }
-
-    public List<Player> getPlayers() {
-        return players;
-    }
-
-    public Deck getDeck() {
-        return deck;
-    }
-
-    public boolean isGameOver() {
-        return isGameOver;
+        Game game = new Game(4);
+        game.startGame();
     }
 }
