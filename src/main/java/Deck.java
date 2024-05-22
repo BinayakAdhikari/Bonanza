@@ -1,29 +1,32 @@
-import java.util.Collections;
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Deck {
-    private Stack<Card> cards = new Stack<>();
+    private List<Card> cards = new ArrayList<>();
+    private ShufflingStrategy shufflingStrategy;
 
-    // Constructor to initialize the deck with cards
-    public Deck() {
-        // Example initialization with simplified card creation
+    public Deck(ShufflingStrategy strategy) {
+        this.shufflingStrategy = strategy;
+        // Initialize deck with cards
+        initializeDeck();
+    }
+
+    private void initializeDeck() {
+        // Add cards to the deck
         for (int i = 0; i < 104; i++) {
-            cards.push(new Card("Bean" + (i % 10), i % 5 + 1));
+            cards.add(new Card("Bean" + (i % 10), i % 5 + 1));
         }
         shuffle();
     }
 
-    // Method to shuffle the cards in the deck
     public void shuffle() {
-        Collections.shuffle(cards);
+        shufflingStrategy.shuffle(cards);
     }
 
-    // Method to draw a card from the deck
     public Card draw() {
-        return cards.isEmpty() ? null : cards.pop();
+        return cards.isEmpty() ? null : cards.remove(0);
     }
 
-    // Method to get the current number of cards in the deck
     public int getSize() {
         return cards.size();
     }

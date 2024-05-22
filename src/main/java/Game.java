@@ -10,7 +10,7 @@ public class Game {
     public Game(int numPlayers) {
         players = new ArrayList<>();
         market = new Market();
-        deck = new Deck();
+        deck = new Deck(new RandomShuffleStrategy());
         isGameOver = false;
         PlantingStrategy plantingStrategy = new SimplePlantingStrategy();
         HarvestingStrategy harvestingStrategy = new SimpleHarvestingStrategy();
@@ -72,7 +72,7 @@ public class Game {
     }
 
     public static void main(String[] args) {
-        Game game = new Game(4);  // Start a game with 4 players
+        Game game = new Game(5);  // Start a game with 4 players
         game.startGame();
     }
 }
