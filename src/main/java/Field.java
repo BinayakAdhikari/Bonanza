@@ -23,6 +23,6 @@ public class Field {
 
     // Provides access to the cards currently in the field
     public List<Card> getCards() {
-        return cards;
+        return new ArrayList<>(cards);
     }
 }

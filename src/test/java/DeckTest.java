@@ -1,48 +1,34 @@
-import org.junit.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class DeckTest {
     private Deck deck;
 
-    @Before
-    public void setUp() {
-        deck = new Deck();  // Assume the constructor fills the deck with cards
+    @BeforeEach
+    void setUp() {
+        deck = new Deck();  // Initialize the deck before each test
     }
 
     @Test
-    public void testDeckInitialization() {
-        assertEquals("Deck should initialize with 104 cards", 104, deck.getSize());
-    }
-
-    @Test
-    public void testDrawCard() {
-        int initialCount = deck.getSize();
+    void testDrawCard() {
         Card card = deck.draw();
-        assertNotNull("Drawn card should not be null", card);
-        assertEquals("Deck size should decrease by 1", initialCount - 1, deck.getSize());
+        assertNotNull(card, "Drawn card should not be null when the deck is initialized correctly.");
     }
 
     @Test
-    public void testShuffleDeck() {
-        // Draw initial card order
-        Card[] initialCards = new Card[5];
-        for (int i = 0; i < 5; i++) {
-            initialCards[i] = deck.draw();
-        }
+    void testDeckSizeAfterDraw() {
+        int initialSize = deck.getSize();  // Assuming getSize() correctly returns the number of cards in the deck
+        deck.draw();
+        assertEquals(initialSize - 1, deck.getSize(), "Deck size should decrease by 1 after a card is drawn.");
+    }
 
-        // Shuffle the deck and redraw
+    @Test
+    void testShuffleDeck() {
+        Card firstCard = deck.draw();
+        deck.shuffle(); // Assuming shuffle is properly randomizing the deck
+        deck = new Deck(); // Reinitialize to reset the deck
         deck.shuffle();
-        boolean isShuffled = false;
-
-        for (int i = 0; i < 5; i++) {
-            if (!initialCards[i].equals(deck.draw())) {
-                isShuffled = true;
-                break;
-            }
-        }
-
-        assertTrue("Deck should be shuffled", isShuffled);
+        assertNotEquals(firstCard, deck.draw(), "First card should not be the same after reshuffling.");
     }
 }

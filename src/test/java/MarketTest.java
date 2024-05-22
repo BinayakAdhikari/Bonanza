@@ -1,5 +1,5 @@
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MarketTest {
@@ -12,8 +12,9 @@ public class MarketTest {
     @BeforeEach
     void setUp() {
         market = new Market();
-        player1 = new Player(new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
-        player2 = new Player(new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
+        // Including names and strategies for player instantiation
+        player1 = new Player("Player 1", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
+        player2 = new Player("Player 2", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
         card1 = new Card("Blue Bean", 4);
         card2 = new Card("Red Bean", 3);
         player1.addCardToHand(card1);

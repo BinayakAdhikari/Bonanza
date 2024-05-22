@@ -1,5 +1,5 @@
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
@@ -8,22 +8,27 @@ public class PlayerTest {
 
     @BeforeEach
     void setUp() {
-        player = new Player(new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
+        // Assume each card represents a significant value for simplification
+        player = new Player("Player 1", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
         card = new Card("Black Bean", 5);
         player.addCardToHand(card);
+        player.plantBean(card, 0);  // Plant the card in the field
     }
 
     @Test
     void testPlantBean() {
+        player.addCardToHand(card);
         player.plantBean(card, 0);
-        assertEquals(1, player.getFields().get(0).getNumberOfBeans(), "Field should have one bean after planting.");
+        assertEquals(1, player.getFields().get(0).getCards().size(), "Field should have one bean after planting.");
+        assertTrue(player.getFields().get(0).getCards().contains(card), "The planted card should be in the field.");
     }
 
     @Test
     void testHarvestBeans() {
-        player.plantBean(card, 0);
+        int coinsBefore = player.getCoins();
         int coinsEarned = player.harvestBeans(0);
-        assertEquals(0, player.getFields().get(0).getNumberOfBeans(), "Field should be empty after harvesting.");
         assertTrue(coinsEarned > 0, "Player should earn coins from harvesting.");
+        assertTrue(player.getCoins() > coinsBefore, "Player's coin total should increase after harvesting.");
+        assertEquals(0, player.getFields().get(0).getNumberOfBeans(), "Field should be empty after harvesting.");
     }
 }
