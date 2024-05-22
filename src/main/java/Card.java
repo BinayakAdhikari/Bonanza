@@ -1,8 +1,11 @@
+import java.util.Dictionary;
+import java.util.HashMap;
+
 public class Card {
     private String beanType;
-    private int beanometer;
+    private HashMap beanometer;
 
-    public Card(String beanType, int beanometer) {
+    public Card(String beanType, HashMap<Integer , Integer> beanometer) {
         this.beanType = beanType;
         this.beanometer = beanometer;
     }
@@ -11,7 +14,7 @@ public class Card {
         return beanType;
     }
 
-    public int getBeanometer() {
-        return beanometer;
+    public int getBeanometer(int numberOfCards) {
+        return (int) beanometer.get(numberOfCards);
     }
 }
