@@ -12,12 +12,11 @@ public class PlayerTest {
         player = new Player("Player 1", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
         card = new Card("Black Bean", 5);
         player.addCardToHand(card);
-        player.plantBean(card, 0);  // Plant the card in the field
+//        player.plantBean(card, 0);  // Plant the card in the field
     }
 
     @Test
     void testPlantBean() {
-        player.addCardToHand(card);
         player.plantBean(card, 0);
         assertEquals(1, player.getFields().get(0).getCards().size(), "Field should have one bean after planting.");
         assertTrue(player.getFields().get(0).getCards().contains(card), "The planted card should be in the field.");
