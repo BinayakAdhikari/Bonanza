@@ -13,32 +13,9 @@ public class Deck {
 
     private void initializeDeck() {
         // Add cards to the deck
-        // create concrete Create Card Strategies
-        // create garden beans
-        CreateCardStrategy gardenBeanCreateCardStrategy = new GardenBeanCreateCardStrategy();
-        cards.addAll(gardenBeanCreateCardStrategy.createCard("Garden Bean"));
-        // create red beans
-        CreateCardStrategy redBeanCreateCardStrategy = new RedBeanCreateCardStrategy();
-        cards.addAll(redBeanCreateCardStrategy.createCard("Red Bean"));
-        // create black-eyed beans
-        CreateCardStrategy blackEyedBeanCreateCardStrategy = new BlackEyedBeanCreateCardStrategy();
-        cards.addAll(blackEyedBeanCreateCardStrategy.createCard("Black Eyed Bean"));
-        // create soy beans
-        CreateCardStrategy soyBeanCreateCardStrategy = new SoyBeanCreateCardStrategy();
-        cards.addAll(soyBeanCreateCardStrategy.createCard("Soy Bean"));
-        // create green beans
-        CreateCardStrategy greenBeanCreateCardStrategy = new GreenBeanCreateCardStrategy();
-        cards.addAll(greenBeanCreateCardStrategy.createCard("Green Bean"));
-        // create stink beans
-        CreateCardStrategy stinkBeanCreateCardStrategy = new StinkBeanCreateCardStrategy();
-        cards.addAll(stinkBeanCreateCardStrategy.createCard("Stink Bean"));
-        // create chili beans
-        CreateCardStrategy chiliBeanCreateCardStrategy = new ChiliBeanCreateCardStrategy();
-        cards.addAll(chiliBeanCreateCardStrategy.createCard("Chili Bean"));
-        // create blue beans
-        CreateCardStrategy blueBeanCreateCardStrategy = new BlueBeanCreateCardStrategy();
-        cards.addAll(blueBeanCreateCardStrategy.createCard("Blue Bean"));
-
+        for (int i = 0; i < 104; i++) {
+            cards.add(new Card("Bean" + (i % 10), i % 5 + 1));
+        }
         shuffle();
     }
 
