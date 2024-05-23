@@ -1,5 +1,6 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DeckTest {
@@ -7,7 +8,7 @@ public class DeckTest {
 
     @BeforeEach
     void setUp() {
-        deck = new Deck();  // Initialize the deck before each test
+        deck = new Deck(new RandomShuffleStrategy());  // Initialize the deck before each test
     }
 
     @Test
@@ -27,7 +28,7 @@ public class DeckTest {
     void testShuffleDeck() {
         Card firstCard = deck.draw();
         deck.shuffle(); // Assuming shuffle is properly randomizing the deck
-        deck = new Deck(); // Reinitialize to reset the deck
+        deck = new Deck(new RandomShuffleStrategy()); // Reinitialize to reset the deck
         deck.shuffle();
         assertNotEquals(firstCard, deck.draw(), "First card should not be the same after reshuffling.");
     }

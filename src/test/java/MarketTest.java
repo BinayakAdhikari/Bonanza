@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.LinkedHashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MarketTest {
@@ -15,8 +18,18 @@ public class MarketTest {
         // Including names and strategies for player instantiation
         player1 = new Player("Player 1", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
         player2 = new Player("Player 2", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
-        card1 = new Card("Blue Bean", 4);
-        card2 = new Card("Red Bean", 3);
+        card1 = new Card("Blue Bean", new LinkedHashMap<Integer,Integer>() {{
+            put(4,1);
+            put(6,2);
+            put(8,3);
+            put(9,4);
+        }});
+        card2 = new Card("Red Bean", new LinkedHashMap<Integer,Integer>() {{
+            put(2,1);
+            put(3,2);
+            put(4,3);
+            put(5,4);
+        }});
         player1.addCardToHand(card1);
         player2.addCardToHand(card2);
     }

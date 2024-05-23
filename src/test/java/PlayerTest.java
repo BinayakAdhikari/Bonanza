@@ -1,5 +1,8 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.LinkedHashMap;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
@@ -10,7 +13,12 @@ public class PlayerTest {
     void setUp() {
         // Assume each card represents a significant value for simplification
         player = new Player("Player 1", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
-        card = new Card("Black Bean", 5);
+        card = new Card("Black Eyed Bean", new LinkedHashMap<>() {{
+            put(2,1);
+            put(4,2);
+            put(5,3);
+            put(6,4);
+        }});
         player.addCardToHand(card);
 //        player.plantBean(card, 0);  // Plant the card in the field
     }

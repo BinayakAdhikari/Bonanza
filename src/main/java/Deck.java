@@ -1,29 +1,55 @@
-import java.util.Collections;
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Deck {
-    private Stack<Card> cards = new Stack<>();
+    private List<Card> cards = new ArrayList<>();
+    private ShufflingStrategy shufflingStrategy;
 
-    // Constructor to initialize the deck with cards
-    public Deck() {
-        // Example initialization with simplified card creation
-        for (int i = 0; i < 104; i++) {
-            cards.push(new Card("Bean" + (i % 10), i % 5 + 1));
-        }
+    public Deck(ShufflingStrategy strategy) {
+        this.shufflingStrategy = strategy;
+        // Initialize deck with cards
+        initializeDeck();
+    }
+
+    private void initializeDeck() {
+        // Add cards to the deck
+        // create concrete Create Card Strategies
+        // create garden beans
+        CreateCardStrategy gardenBeanCreateCardStrategy = new GardenBeanCreateCardStrategy();
+        cards.addAll(gardenBeanCreateCardStrategy.createCard("Garden Bean"));
+        // create red beans
+        CreateCardStrategy redBeanCreateCardStrategy = new RedBeanCreateCardStrategy();
+        cards.addAll(redBeanCreateCardStrategy.createCard("Red Bean"));
+        // create black-eyed beans
+        CreateCardStrategy blackEyedBeanCreateCardStrategy = new BlackEyedBeanCreateCardStrategy();
+        cards.addAll(blackEyedBeanCreateCardStrategy.createCard("Black Eyed Bean"));
+        // create soy beans
+        CreateCardStrategy soyBeanCreateCardStrategy = new SoyBeanCreateCardStrategy();
+        cards.addAll(soyBeanCreateCardStrategy.createCard("Soy Bean"));
+        // create green beans
+        CreateCardStrategy greenBeanCreateCardStrategy = new GreenBeanCreateCardStrategy();
+        cards.addAll(greenBeanCreateCardStrategy.createCard("Green Bean"));
+        // create stink beans
+        CreateCardStrategy stinkBeanCreateCardStrategy = new StinkBeanCreateCardStrategy();
+        cards.addAll(stinkBeanCreateCardStrategy.createCard("Stink Bean"));
+        // create chili beans
+        CreateCardStrategy chiliBeanCreateCardStrategy = new ChiliBeanCreateCardStrategy();
+        cards.addAll(chiliBeanCreateCardStrategy.createCard("Chili Bean"));
+        // create blue beans
+        CreateCardStrategy blueBeanCreateCardStrategy = new BlueBeanCreateCardStrategy();
+        cards.addAll(blueBeanCreateCardStrategy.createCard("Blue Bean"));
+
         shuffle();
     }
 
-    // Method to shuffle the cards in the deck
     public void shuffle() {
-        Collections.shuffle(cards);
+        shufflingStrategy.shuffle(cards);
     }
 
-    // Method to draw a card from the deck
     public Card draw() {
-        return cards.isEmpty() ? null : cards.pop();
+        return cards.isEmpty() ? null : cards.remove(0);
     }
 
-    // Method to get the current number of cards in the deck
     public int getSize() {
         return cards.size();
     }
