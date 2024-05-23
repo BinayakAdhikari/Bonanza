@@ -1,33 +1,55 @@
-import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Stack;
 
 public class Deck {
-    private List<Card> cards = new ArrayList<>();
+    private Stack<Card> drawDeck = new Stack<>();
+    private List<Card> discardDeck = new LinkedList<>();
     private ShufflingStrategy shufflingStrategy;
+    private int reshuffleCount = 0;
 
     public Deck(ShufflingStrategy strategy) {
         this.shufflingStrategy = strategy;
-        // Initialize deck with cards
         initializeDeck();
     }
 
     private void initializeDeck() {
-        // Add cards to the deck
+        // Populate the draw deck with initial cards
         for (int i = 0; i < 104; i++) {
-            cards.add(new Card("Bean" + (i % 10), i % 5 + 1));
+            drawDeck.push(new Card("Bean" + (i % 10), i % 5 + 1));
         }
         shuffle();
     }
 
     public void shuffle() {
-        shufflingStrategy.shuffle(cards);
+        if (!discardDeck.isEmpty()) {
+            drawDeck.addAll(discardDeck);
+            discardDeck.clear();
+            shufflingStrategy.shuffle(drawDeck);
+            reshuffleCount++;
+            System.out.println("Discard deck reshuffled into the draw deck. Reshuffle count: " + reshuffleCount);
+        } else {
+            shufflingStrategy.shuffle(drawDeck);
+        }
     }
 
     public Card draw() {
-        return cards.isEmpty() ? null : cards.remove(0);
+        if (drawDeck.isEmpty() && !discardDeck.isEmpty()) {
+            shuffle();  // Reshuffle the discard deck back into the draw deck
+        }
+        return drawDeck.isEmpty() ? null : drawDeck.pop();
     }
 
-    public int getSize() {
-        return cards.size();
+    public void discard(Card card) {
+        discardDeck.add(card);
+    }
+
+    public int getReshuffleCount() {
+        return reshuffleCount;
+    }
+
+    public boolean isDrawDeckEmpty() {
+        return drawDeck.isEmpty();
     }
 }

@@ -10,7 +10,7 @@ public class Game {
     public Game(int numPlayers) {
         players = new ArrayList<>();
         market = new Market();
-        deck = new Deck(new RandomShuffleStrategy());
+        deck = new Deck(new RandomShuffleStrategy()); // Initialize deck with a random shuffle strategy
         isGameOver = false;
         PlantingStrategy plantingStrategy = new SimplePlantingStrategy();
         HarvestingStrategy harvestingStrategy = new SimpleHarvestingStrategy();
@@ -20,34 +20,36 @@ public class Game {
         }
     }
 
-    public List<Player> getPlayers() {
-        return players;
-    }
-
     public void playTurn(Player player) {
         System.out.println("Starting turn for " + player);
 
         if (!player.getHand().isEmpty()) {
             Card cardToPlant = player.getHand().remove(0);
             System.out.println(player + " is planting a bean: " + cardToPlant.getBeanType());
-            player.plantBean(cardToPlant, 0);  // Plant in the first field
+            player.plantBean(cardToPlant, 0);
         }
 
-        // Check each field if it can be harvested
         for (int i = 0; i < player.getFields().size(); i++) {
             if (!player.getFields().get(i).getCards().isEmpty()) {
                 System.out.println(player + " is harvesting from field " + i);
-                player.harvestBeans(i);
+                HarvestResult result = player.harvestBeans(i);
+                for (Card card : result.getHarvestedCards()) {
+                    deck.discard(card);  // Discard each harvested card
+                }
             }
         }
 
-        // Draw three cards at the end of the turn
         for (int i = 0; i < 3; i++) {
             Card card = deck.draw();
             if (card != null) {
                 player.addCardToHand(card);
                 System.out.println(player + " draws a card: " + card.getBeanType());
             }
+        }
+
+        if (deck.getReshuffleCount() >= 3) {
+            System.out.println("Game over: The discard pile has been reshuffled three times.");
+            isGameOver = true;
         }
 
         System.out.println("Ending turn for " + player + "\n");
@@ -57,22 +59,21 @@ public class Game {
         while (!isGameOver) {
             for (Player player : players) {
                 playTurn(player);
-                if (deck.getSize() == 0) {  // Check if deck is empty
-                    System.out.println("The deck is empty. Game over.");
-                    isGameOver = true;
-                    break;
-                }
             }
         }
+        System.out.println("Game Over. Thank you for playing!");
     }
 
-    // Getter for isGameOver
+    public List<Player> getPlayers() {
+        return players;
+    }
+
     public boolean isGameOver() {
         return isGameOver;
     }
 
     public static void main(String[] args) {
-        Game game = new Game(5);  // Start a game with 4 players
+        Game game = new Game(5);  // Corrected to 5 players
         game.startGame();
     }
 }

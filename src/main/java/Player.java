@@ -22,10 +22,10 @@ public class Player {
         System.out.println(name + " plants " + card.getBeanType() + " in field " + fieldIndex);
     }
 
-    public int harvestBeans(int fieldIndex) {
-        int coinsEarned = harvestingStrategy.harvestBeans(this, fieldIndex);
-        System.out.println(name + " harvests field " + fieldIndex + " for " + coinsEarned + " coins");
-        return coinsEarned;
+    public HarvestResult harvestBeans(int fieldIndex) {
+        HarvestResult result = harvestingStrategy.harvestBeans(this, fieldIndex);
+        System.out.println(name + " harvests field " + fieldIndex + " for " + result.getCoinsEarned() + " coins");
+        return result;
     }
 
     public void addCardToHand(Card card) {
