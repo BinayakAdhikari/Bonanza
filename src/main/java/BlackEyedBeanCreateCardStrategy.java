@@ -1,11 +1,11 @@
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 public class BlackEyedBeanCreateCardStrategy implements CreateCardStrategy{
     @Override
     public ArrayList<Card> createCard(String beanType) {
         ArrayList<Card> cards = new ArrayList<>();
-        HashMap<Integer, Integer> beanometer = new HashMap<Integer,Integer>() {{
+        LinkedHashMap<Integer, Integer> beanometer = new LinkedHashMap<>() {{
             put(2,1);
             put(4,2);
             put(5,3);

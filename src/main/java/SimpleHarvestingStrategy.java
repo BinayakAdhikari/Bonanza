@@ -1,3 +1,4 @@
+import java.util.HashMap;
 import java.util.List;
 
 public class SimpleHarvestingStrategy implements HarvestingStrategy {
@@ -5,7 +6,10 @@ public class SimpleHarvestingStrategy implements HarvestingStrategy {
     public int harvestBeans(Player player, int fieldIndex) {
         Field field = player.getFields().get(fieldIndex);
         List<Card> harvested = field.harvestBeans();
-        int coins = harvested.size();  // Simple coin calculation: 1 coin per bean
+        // get beanometer
+        int numberOfCoins = harvested.size();
+        int coins = harvested.get(0).getBeanometer(numberOfCoins);
+
         player.addCoins(coins);
         return coins;
     }
