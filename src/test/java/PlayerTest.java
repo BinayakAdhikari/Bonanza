@@ -6,9 +6,9 @@ public class PlayerTest {
     @Test
     public void testPlayer() {
         Game game = new Game();
-        PlantingStrategy plantingStrategy = new SimplePlantingStrategy();
-        HarvestingStrategy harvestingStrategy = new SimpleHarvestingStrategy();
-        Player player = new Player("Alice", plantingStrategy, harvestingStrategy, game);
+        game.setupGame();
+
+        Player player = game.getPlayers().get(0);
 
         assertEquals("Alice", player.getName());
         assertTrue(player.getHand().isEmpty());
@@ -26,6 +26,8 @@ public class PlayerTest {
         System.out.println("Field status: " + player.getFieldStatus());
 
         assertTrue(player.getHand().isEmpty());
-        assertEquals(1, player.getFields().get(0).getStatus().split(" ").length);
+        String[] fieldStatuses = player.getFieldStatus().split("\n");
+        assertEquals("1 Blue Bean(s)", fieldStatuses[0].trim());
+        assertEquals("Empty field", fieldStatuses[1].trim());
     }
 }

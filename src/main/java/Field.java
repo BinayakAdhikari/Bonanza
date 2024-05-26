@@ -2,32 +2,36 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Field {
-    private List<Card> plantedBeans;
+    private List<Card> beans;
 
     public Field() {
-        this.plantedBeans = new ArrayList<>();
-    }
-
-    public void addBean(Card card) {
-        plantedBeans.add(card);
-    }
-
-    public HarvestResult harvestField() {
-        if (plantedBeans.isEmpty()) return new HarvestResult(0, new ArrayList<>());
-        BeanType beanType = plantedBeans.get(0).getBeanType();
-        int coinCount = beanType.getBeanometer().getHarvestValue(plantedBeans.size());
-        List<Card> harvestedCards = new ArrayList<>(plantedBeans);
-        plantedBeans.clear();
-        return new HarvestResult(coinCount, harvestedCards);
+        this.beans = new ArrayList<>();
     }
 
     public boolean canPlant(Card card) {
-        if (plantedBeans.isEmpty()) return true;
-        return plantedBeans.get(0).getBeanType().equals(card.getBeanType());
+        return beans.isEmpty() || beans.get(0).getBeanType().equals(card.getBeanType());
+    }
+
+    public void addBean(Card card) {
+        beans.add(card);
+    }
+
+    public HarvestResult harvestField() {
+        int beanCount = beans.size();
+        BeanType beanType = beans.get(0).getBeanType();
+        int coins = beanType.getBeanometer().getHarvestValue(beanCount);
+
+        List<Card> harvestedCards = new ArrayList<>(beans);
+        beans.clear();
+
+        return new HarvestResult(coins, harvestedCards);
     }
 
     public String getStatus() {
-        if (plantedBeans.isEmpty()) return "Empty field";
-        return plantedBeans.size() + " " + plantedBeans.get(0).getBeanType().getName() + "(s)";
+        if (beans.isEmpty()) {
+            return "Empty field";
+        }
+        BeanType beanType = beans.get(0).getBeanType();
+        return beans.size() + " " + beanType.getName() + "(s)";
     }
 }

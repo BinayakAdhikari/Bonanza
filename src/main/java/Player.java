@@ -149,7 +149,7 @@ public class Player {
         }
     }
 
-    private Game getCurrentGame() {
+    Game getCurrentGame() {
         return currentGame;
     }
 }

@@ -11,6 +11,8 @@ public class Game {
     private int drawPileReshuffles;
     private final int MAX_ROUNDS = 20; // Example value for maximum rounds
     private List<GamePhaseStrategy> phases;
+    private PlantingStrategy plantingStrategy;
+    private HarvestingStrategy harvestingStrategy;
 
     public Game() {
         this.phases = Arrays.asList(
@@ -21,6 +23,8 @@ public class Game {
         );
         this.roundCount = 0;
         this.drawPileReshuffles = 0;
+        this.plantingStrategy = new SimplePlantingStrategy();
+        this.harvestingStrategy = new SimpleHarvestingStrategy();
     }
 
     public void setupGame() {
@@ -103,8 +107,6 @@ public class Game {
         for (int i = 0; i < 6; i++) cards.add(new Card(gardenBean));
 
         // Create Players
-        PlantingStrategy plantingStrategy = new SimplePlantingStrategy();
-        HarvestingStrategy harvestingStrategy = new SimpleHarvestingStrategy();
         players = new ArrayList<>();
         players.add(new Player("Alice", plantingStrategy, harvestingStrategy, this));
         players.add(new Player("Bob", plantingStrategy, harvestingStrategy, this));
@@ -171,6 +173,14 @@ public class Game {
 
     public List<Player> getPlayers() {
         return players;
+    }
+
+    public PlantingStrategy getPlantingStrategy() {
+        return plantingStrategy;
+    }
+
+    public HarvestingStrategy getHarvestingStrategy() {
+        return harvestingStrategy;
     }
 
     public static void main(String[] args) {
