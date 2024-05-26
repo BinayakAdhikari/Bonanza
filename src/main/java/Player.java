@@ -115,7 +115,7 @@ public class Player {
         if (!firstField.getBeans().isEmpty()) {
             HarvestResult result = harvestingStrategy.harvest(firstField, this);
             coins.addAll(result.getHarvestedCards());
-            System.out.println("[" + name + "] harvests " + firstField.getBeans().size() + " " + firstField.getBeans().get(0).getBeanType().getName() + "(s) and gains " + result.getCoins() + " coins.");
+            System.out.println("[" + name + "] harvests " + firstField.getBeans().size() + " " + firstField.getBeans().get(0).getBeanType().getName() + "(s) and gains " + result.getCoins() + " coin(s).");
             discardRemainingCards(result.getHarvestedCards());
         }
         firstField.addBean(new Card(beanType));
