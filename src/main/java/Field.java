@@ -16,13 +16,21 @@ public class Field {
         beans.add(card);
     }
 
+    public List<Card> getBeans() {
+        return beans;
+    }
+
+    public void clear() {
+        beans.clear();
+    }
+
     public HarvestResult harvestField() {
         int beanCount = beans.size();
         BeanType beanType = beans.get(0).getBeanType();
         int coins = beanType.getBeanometer().getHarvestValue(beanCount);
 
         List<Card> harvestedCards = new ArrayList<>(beans);
-        beans.clear();
+        clear();
 
         return new HarvestResult(coins, harvestedCards);
     }

@@ -142,6 +142,7 @@ public class Game {
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
         roundCount++;
         System.out.println("Round " + roundCount + " completed.");
+        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.calculateCoins() + " coins.");
     }
 
     public void endGame() {

@@ -112,11 +112,14 @@ public class Player {
             }
         }
         Field firstField = fields.get(0);
-        HarvestResult result = harvestingStrategy.harvest(firstField, this);
-        coins.addAll(result.getHarvestedCards());
-        System.out.println("[" + name + "] harvests a field and gains " + result.getCoins() + " coins.");
-        discardRemainingCards(result.getHarvestedCards());
+        if (!firstField.getBeans().isEmpty()) {
+            HarvestResult result = harvestingStrategy.harvest(firstField, this);
+            coins.addAll(result.getHarvestedCards());
+            System.out.println("[" + name + "] harvests " + firstField.getBeans().size() + " " + firstField.getBeans().get(0).getBeanType().getName() + "(s) and gains " + result.getCoins() + " coins.");
+            discardRemainingCards(result.getHarvestedCards());
+        }
         firstField.addBean(new Card(beanType));
+        System.out.println("[" + name + "] plants " + beanType.getName() + " in the newly harvested field.");
     }
 
     public void receiveTrade(List<Card> cards) {
@@ -142,7 +145,6 @@ public class Player {
     private void discardRemainingCards(List<Card> harvestedCards) {
         for (Card card : harvestedCards) {
             if (!card.isCoin()) {
-                // Add non-coin cards to the discard pile
                 currentGame.getDeck().discardCard(card);
                 System.out.println("[" + name + "] discards " + card.getBeanType().getName() + " card.");
             }
