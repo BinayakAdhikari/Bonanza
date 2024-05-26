@@ -4,11 +4,13 @@ public class Deck {
     private List<Card> drawPile;
     private List<Card> discardPile;
     private ShufflingStrategy shufflingStrategy;
+    private Game game;
 
-    public Deck(List<Card> cards, ShufflingStrategy shufflingStrategy) {
+    public Deck(List<Card> cards, ShufflingStrategy shufflingStrategy, Game game) {
         this.drawPile = new ArrayList<>(cards);
         this.discardPile = new ArrayList<>();
         this.shufflingStrategy = shufflingStrategy;
+        this.game = game;
         shuffle();
     }
 
@@ -31,9 +33,14 @@ public class Deck {
     }
 
     public void reshuffleDiscardIntoDraw() {
+        if (discardPile.isEmpty()) {
+            return; // Nothing to reshuffle
+        }
         drawPile.addAll(discardPile);
         discardPile.clear();
         shuffle();
+        game.incrementReshuffleCount();
+        System.out.println("Reshuffled the discard pile into the draw pile. Total reshuffles: " + game.getDrawPileReshuffles());
     }
 
     public boolean isEmpty() {

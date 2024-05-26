@@ -9,8 +9,9 @@ public class DeckTest {
         BeanType beanType = new BeanType("Blue Bean", beanometer);
         List<Card> cards = Arrays.asList(new Card(beanType), new Card(beanType));
         ShufflingStrategy shufflingStrategy = new RandomShuffleStrategy();
+        Game game = new Game();
 
-        Deck deck = new Deck(cards, shufflingStrategy);
+        Deck deck = new Deck(cards, shufflingStrategy, game);
         assertFalse(deck.isEmpty());
 
         Card drawnCard = deck.drawCard();

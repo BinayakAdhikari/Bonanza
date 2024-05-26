@@ -9,8 +9,9 @@ public class Player {
     private boolean isStartingPlayer;
     private PlantingStrategy plantingStrategy;
     private HarvestingStrategy harvestingStrategy;
+    private Game currentGame;
 
-    public Player(String name, PlantingStrategy plantingStrategy, HarvestingStrategy harvestingStrategy) {
+    public Player(String name, PlantingStrategy plantingStrategy, HarvestingStrategy harvestingStrategy, Game currentGame) {
         this.name = name;
         this.hand = new ArrayList<>();
         this.fields = new ArrayList<>();
@@ -20,6 +21,7 @@ public class Player {
         this.harvestingStrategy = harvestingStrategy;
         this.fields.add(new Field());
         this.fields.add(new Field());
+        this.currentGame = currentGame;
     }
 
     public String getName() {
@@ -49,9 +51,11 @@ public class Player {
     public void plantBeanFromHand() {
         if (hand.isEmpty()) return;
         Card firstCard = hand.remove(0);
+        System.out.println(name + " plants " + firstCard.getBeanType().getName() + " from hand.");
         plantingStrategy.plant(firstCard, this);
         if (!hand.isEmpty()) {
             Card secondCard = hand.remove(0);
+            System.out.println(name + " plants " + secondCard.getBeanType().getName() + " from hand.");
             plantingStrategy.plant(secondCard, this);
         }
     }
@@ -63,10 +67,12 @@ public class Player {
             Card card = game.getDeck().drawCard();
             if (card != null) {
                 turnedOverCards.add(card);
+                System.out.println(name + " turns over " + card.getBeanType().getName() + " from the deck.");
             }
         }
         market.trade(this);
         for (Card card : turnedOverCards) {
+            System.out.println(name + " plants turned over " + card.getBeanType().getName() + " from the deck.");
             plantingStrategy.plant(card, this);
         }
     }
@@ -80,6 +86,7 @@ public class Player {
             Card card = deck.drawCard();
             if (card != null) {
                 hand.add(card);
+                System.out.println(name + " draws " + card.getBeanType().getName() + " from the deck.");
             }
         }
     }
@@ -100,17 +107,21 @@ public class Player {
         for (Field field : fields) {
             if (field.canPlant(new Card(beanType))) {
                 field.addBean(new Card(beanType));
+                System.out.println(name + " plants " + beanType.getName() + " in a field.");
                 return;
             }
         }
         Field firstField = fields.get(0);
         HarvestResult result = harvestingStrategy.harvest(firstField, this);
         coins.addAll(result.getHarvestedCards());
+        System.out.println(name + " harvests a field and gains " + result.getCoins() + " coins.");
+        discardRemainingCards(result.getHarvestedCards());
         firstField.addBean(new Card(beanType));
     }
 
     public void receiveTrade(List<Card> cards) {
         for (Card card : cards) {
+            System.out.println(name + " receives " + card.getBeanType().getName() + " from trade.");
             plantBean(card.getBeanType());
         }
     }
@@ -119,10 +130,26 @@ public class Player {
         for (Card card : cards) {
             hand.remove(card);
             player.takeGift(card);
+            System.out.println(name + " gives " + card.getBeanType().getName() + " to " + player.getName() + " as a gift.");
         }
     }
 
     public void takeGift(Card card) {
         hand.add(card);
+        System.out.println(name + " takes " + card.getBeanType().getName() + " as a gift.");
+    }
+
+    private void discardRemainingCards(List<Card> harvestedCards) {
+        for (Card card : harvestedCards) {
+            if (!card.isCoin()) {
+                // Add non-coin cards to the discard pile
+                currentGame.getDeck().discardCard(card);
+                System.out.println(name + " discards " + card.getBeanType().getName() + " card.");
+            }
+        }
+    }
+
+    private Game getCurrentGame() {
+        return currentGame;
     }
 }
