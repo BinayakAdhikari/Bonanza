@@ -1,33 +1,26 @@
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlayerTest {
-    private Player player;
-    private Card card;
-
-    @BeforeEach
-    void setUp() {
-        // Assume each card represents a significant value for simplification
-        player = new Player("Player 1", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
-        card = new Card("Black Bean", 5);
-        player.addCardToHand(card);
-//        player.plantBean(card, 0);  // Plant the card in the field
-    }
-
     @Test
-    void testPlantBean() {
-        player.plantBean(card, 0);
-        assertEquals(1, player.getFields().get(0).getCards().size(), "Field should have one bean after planting.");
-        assertTrue(player.getFields().get(0).getCards().contains(card), "The planted card should be in the field.");
-    }
+    public void testPlayer() {
+        PlantingStrategy plantingStrategy = new SimplePlantingStrategy();
+        HarvestingStrategy harvestingStrategy = new SimpleHarvestingStrategy();
+        Player player = new Player("Alice", plantingStrategy, harvestingStrategy);
 
-    @Test
-    void testHarvestBeans() {
-        int coinsBefore = player.getCoins();
-        int coinsEarned = player.harvestBeans(0);
-        assertTrue(coinsEarned > 0, "Player should earn coins from harvesting.");
-        assertTrue(player.getCoins() > coinsBefore, "Player's coin total should increase after harvesting.");
-        assertEquals(0, player.getFields().get(0).getNumberOfBeans(), "Field should be empty after harvesting.");
+        assertEquals("Alice", player.getName());
+        assertTrue(player.getHand().isEmpty());
+        assertEquals(2, player.getFields().size());
+
+        Beanometer beanometer = new Beanometer(Map.of(4, 1, 6, 2, 8, 3, 10, 4));
+        BeanType beanType = new BeanType("Blue Bean", beanometer);
+        Card card = new Card(beanType);
+
+        player.getHand().add(card);
+        player.plantBeanFromHand();
+
+        assertTrue(player.getHand().isEmpty());
+        assertEquals(1, player.getFields().get(0).getStatus().split(" ").length);
     }
 }

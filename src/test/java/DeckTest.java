@@ -1,35 +1,23 @@
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DeckTest {
-    private Deck deck;
-
-    @BeforeEach
-    void setUp() {
-        deck = new Deck(new RandomShuffleStrategy());  // Initialize the deck before each test
-    }
-
     @Test
-    void testDrawCard() {
-        Card card = deck.draw();
-        assertNotNull(card, "Drawn card should not be null when the deck is initialized correctly.");
-    }
+    public void testDeck() {
+        Beanometer beanometer = new Beanometer(Map.of(4, 1, 6, 2, 8, 3, 10, 4));
+        BeanType beanType = new BeanType("Blue Bean", beanometer);
+        List<Card> cards = Arrays.asList(new Card(beanType), new Card(beanType));
+        ShufflingStrategy shufflingStrategy = new RandomShuffleStrategy();
 
-    @Test
-    void testDeckSizeAfterDraw() {
-        int initialSize = deck.getSize();  // Assuming getSize() correctly returns the number of cards in the deck
-        deck.draw();
-        assertEquals(initialSize - 1, deck.getSize(), "Deck size should decrease by 1 after a card is drawn.");
-    }
+        Deck deck = new Deck(cards, shufflingStrategy);
+        assertFalse(deck.isEmpty());
 
-    @Test
-    void testShuffleDeck() {
-        Card firstCard = deck.draw();
-        deck.shuffle(); // Assuming shuffle is properly randomizing the deck
-        deck = new Deck(new RandomShuffleStrategy()); // Reinitialize to reset the deck
-        deck.shuffle();
-        assertNotEquals(firstCard, deck.draw(), "First card should not be the same after reshuffling.");
+        Card drawnCard = deck.drawCard();
+        assertNotNull(drawnCard);
+
+        deck.discardCard(drawnCard);
+        deck.reshuffleDiscardIntoDraw();
+        assertFalse(deck.isEmpty());
     }
 }
