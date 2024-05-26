@@ -1,34 +1,29 @@
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-
-import java.util.List;
-
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FieldTest {
-    private Field field;
-    private Card card1;
-    private Card card2;
-
-    @BeforeEach
-    void setUp() {
-        field = new Field();
-        card1 = new Card("Blue Bean", 4);
-        card2 = new Card("Red Bean", 3);
-    }
-
     @Test
-    void testPlantBean() {
-        field.plantBean(card1);
-        assertTrue(field.getCards().contains(card1), "Field should contain the planted card.");
-    }
+    public void testField() {
+        Beanometer beanometer = new Beanometer(Map.of(4, 1, 6, 2, 8, 3, 10, 4));
+        BeanType beanType = new BeanType("Blue Bean", beanometer);
+        Field field = new Field();
 
-    @Test
-    void testHarvestBeans() {
-        field.plantBean(card1);
-        field.plantBean(card2);
-        List<Card> harvested = field.harvestBeans();
-        assertTrue(harvested.contains(card1) && harvested.contains(card2), "Harvested cards should contain all planted cards.");
-        assertEquals(0, field.getCards().size(), "Field should be empty after harvesting.");
+        assertTrue(field.canPlant(new Card(beanType)));
+
+        Card card = new Card(beanType);
+        field.addBean(card);
+        assertFalse(field.canPlant(new Card(new BeanType("Chili Bean", beanometer))));
+
+        HarvestResult result = field.harvestField();
+        assertEquals(0, result.getCoins()); // Not enough cards for coins
+
+        field.addBean(new Card(beanType));
+        field.addBean(new Card(beanType));
+        field.addBean(new Card(beanType));
+        field.addBean(new Card(beanType));
+
+        result = field.harvestField();
+        assertEquals(1, result.getCoins());
     }
 }

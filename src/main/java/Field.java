@@ -2,27 +2,44 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Field {
-    private List<Card> cards = new ArrayList<>();
+    private List<Card> beans;
 
-    // Adds a card to this field
-    public void plantBean(Card card) {
-        cards.add(card);
+    public Field() {
+        this.beans = new ArrayList<>();
     }
 
-    // Harvests all cards from this field and returns them
-    public List<Card> harvestBeans() {
-        List<Card> harvested = new ArrayList<>(cards);
-        cards.clear();
-        return harvested;
+    public boolean canPlant(Card card) {
+        return beans.isEmpty() || beans.get(0).getBeanType().equals(card.getBeanType());
     }
 
-    // Returns the current number of beans in the field
-    public int getNumberOfBeans() {
-        return cards.size();
+    public void addBean(Card card) {
+        beans.add(card);
     }
 
-    // Provides access to the cards currently in the field
-    public List<Card> getCards() {
-        return new ArrayList<>(cards);
+    public List<Card> getBeans() {
+        return beans;
+    }
+
+    public void clear() {
+        beans.clear();
+    }
+
+    public HarvestResult harvestField() {
+        int beanCount = beans.size();
+        BeanType beanType = beans.get(0).getBeanType();
+        int coins = beanType.getBeanometer().getHarvestValue(beanCount);
+
+        List<Card> harvestedCards = new ArrayList<>(beans);
+        clear();
+
+        return new HarvestResult(coins, harvestedCards);
+    }
+
+    public String getStatus() {
+        if (beans.isEmpty()) {
+            return "Empty field";
+        }
+        BeanType beanType = beans.get(0).getBeanType();
+        return beans.size() + " " + beanType.getName() + "(s)";
     }
 }

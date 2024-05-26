@@ -1,17 +1,21 @@
 public class Card {
-    private String beanType;
-    private int beanometer;
+    private BeanType beanType;
+    private boolean isCoin;
 
-    public Card(String beanType, int beanometer) {
+    public Card(BeanType beanType) {
         this.beanType = beanType;
-        this.beanometer = beanometer;
+        this.isCoin = false;
     }
 
-    public String getBeanType() {
+    public BeanType getBeanType() {
         return beanType;
     }
 
-    public int getBeanometer() {
-        return beanometer;
+    public boolean isCoin() {
+        return isCoin;
+    }
+
+    public void setCoin(boolean coin) {
+        isCoin = coin;
     }
 }

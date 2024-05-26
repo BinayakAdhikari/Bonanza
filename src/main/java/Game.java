@@ -1,79 +1,194 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.logging.Logger;
 
 public class Game {
+    private static final Logger logger = Logger.getLogger(Game.class.getName());
+
     private List<Player> players;
     private Deck deck;
-    private Market market;
-    private boolean isGameOver;
+    private int currentPlayerIndex;
+    private int roundCount;
+    private int drawPileReshuffles;
+    private List<GamePhaseStrategy> phases;
+    private PlantingStrategy plantingStrategy;
+    private HarvestingStrategy harvestingStrategy;
 
-    public Game(int numPlayers) {
-        players = new ArrayList<>();
-        market = new Market();
-        deck = new Deck(new RandomShuffleStrategy()); // Initialize deck with a random shuffle strategy
-        isGameOver = false;
-        PlantingStrategy plantingStrategy = new SimplePlantingStrategy();
-        HarvestingStrategy harvestingStrategy = new SimpleHarvestingStrategy();
-        for (int i = 0; i < numPlayers; i++) {
-            String playerName = "Player " + (i + 1);
-            players.add(new Player(playerName, plantingStrategy, harvestingStrategy));
-        }
+    public Game() {
+        this.phases = Arrays.asList(
+                new PlantBeanPhase(),
+                new TurnOverAndTradePhase(),
+                new PlantTurnedOverAndTradedPhase(),
+                new DrawBeanCardsPhase()
+        );
+        this.roundCount = 0;
+        this.drawPileReshuffles = 0;
+        this.plantingStrategy = new SimplePlantingStrategy();
+        this.harvestingStrategy = new SimpleHarvestingStrategy();
     }
 
-    public void playTurn(Player player) {
-        System.out.println("Starting turn for " + player);
+    public void setupGame() {
+        System.out.println("Setting up the game...");
 
-        if (!player.getHand().isEmpty()) {
-            Card cardToPlant = player.getHand().remove(0);
-            System.out.println(player + " is planting a bean: " + cardToPlant.getBeanType());
-            player.plantBean(cardToPlant, 0);
-        }
+        // Create Beans and Beanometers
+        Map<Integer, Integer> blueBeanometerMap = new HashMap<>();
+        blueBeanometerMap.put(4, 1);
+        blueBeanometerMap.put(6, 2);
+        blueBeanometerMap.put(8, 3);
+        blueBeanometerMap.put(10, 4);
+        Beanometer blueBeanometer = new Beanometer(blueBeanometerMap);
+        BeanType blueBean = new BeanType("Blue Bean", blueBeanometer);
 
-        for (int i = 0; i < player.getFields().size(); i++) {
-            if (!player.getFields().get(i).getCards().isEmpty()) {
-                System.out.println(player + " is harvesting from field " + i);
-                HarvestResult result = player.harvestBeans(i);
-                for (Card card : result.getHarvestedCards()) {
-                    deck.discard(card);  // Discard each harvested card
-                }
-            }
-        }
+        Map<Integer, Integer> chiliBeanometerMap = new HashMap<>();
+        chiliBeanometerMap.put(3, 1);
+        chiliBeanometerMap.put(6, 2);
+        chiliBeanometerMap.put(8, 3);
+        chiliBeanometerMap.put(9, 4);
+        Beanometer chiliBeanometer = new Beanometer(chiliBeanometerMap);
+        BeanType chiliBean = new BeanType("Chili Bean", chiliBeanometer);
 
-        for (int i = 0; i < 3; i++) {
-            Card card = deck.draw();
-            if (card != null) {
-                player.addCardToHand(card);
-                System.out.println(player + " draws a card: " + card.getBeanType());
-            }
-        }
+        Map<Integer, Integer> stinkBeanometerMap = new HashMap<>();
+        stinkBeanometerMap.put(3, 1);
+        stinkBeanometerMap.put(5, 2);
+        stinkBeanometerMap.put(7, 3);
+        stinkBeanometerMap.put(8, 4);
+        Beanometer stinkBeanometer = new Beanometer(stinkBeanometerMap);
+        BeanType stinkBean = new BeanType("Stink Bean", stinkBeanometer);
 
-        if (deck.getReshuffleCount() >= 3) {
-            System.out.println("Game over: The discard pile has been reshuffled three times.");
-            isGameOver = true;
-        }
+        Map<Integer, Integer> greenBeanometerMap = new HashMap<>();
+        greenBeanometerMap.put(3, 1);
+        greenBeanometerMap.put(5, 2);
+        greenBeanometerMap.put(6, 3);
+        greenBeanometerMap.put(7, 4);
+        Beanometer greenBeanometer = new Beanometer(greenBeanometerMap);
+        BeanType greenBean = new BeanType("Green Bean", greenBeanometer);
 
-        System.out.println("Ending turn for " + player + "\n");
+        Map<Integer, Integer> soyBeanometerMap = new HashMap<>();
+        soyBeanometerMap.put(2, 1);
+        soyBeanometerMap.put(4, 2);
+        soyBeanometerMap.put(6, 3);
+        soyBeanometerMap.put(7, 4);
+        Beanometer soyBeanometer = new Beanometer(soyBeanometerMap);
+        BeanType soyBean = new BeanType("Soy Bean", soyBeanometer);
+
+        Map<Integer, Integer> blackEyedBeanometerMap = new HashMap<>();
+        blackEyedBeanometerMap.put(2, 1);
+        blackEyedBeanometerMap.put(4, 2);
+        blackEyedBeanometerMap.put(5, 3);
+        blackEyedBeanometerMap.put(6, 4);
+        Beanometer blackEyedBeanometer = new Beanometer(blackEyedBeanometerMap);
+        BeanType blackEyedBean = new BeanType("Black-Eyed Bean", blackEyedBeanometer);
+
+        Map<Integer, Integer> redBeanometerMap = new HashMap<>();
+        redBeanometerMap.put(2, 1);
+        redBeanometerMap.put(3, 2);
+        redBeanometerMap.put(4, 3);
+        redBeanometerMap.put(5, 4);
+        Beanometer redBeanometer = new Beanometer(redBeanometerMap);
+        BeanType redBean = new BeanType("Red Bean", redBeanometer);
+
+        Map<Integer, Integer> gardenBeanometerMap = new HashMap<>();
+        gardenBeanometerMap.put(2, 1);
+        gardenBeanometerMap.put(3, 2);
+        gardenBeanometerMap.put(4, 3);
+        gardenBeanometerMap.put(5, 4);
+        Beanometer gardenBeanometer = new Beanometer(gardenBeanometerMap);
+        BeanType gardenBean = new BeanType("Garden Bean", gardenBeanometer);
+
+        // Create Cards
+        List<Card> cards = new ArrayList<>();
+        for (int i = 0; i < 20; i++) cards.add(new Card(blueBean));
+        for (int i = 0; i < 18; i++) cards.add(new Card(chiliBean));
+        for (int i = 0; i < 16; i++) cards.add(new Card(stinkBean));
+        for (int i = 0; i < 14; i++) cards.add(new Card(greenBean));
+        for (int i = 0; i < 12; i++) cards.add(new Card(soyBean));
+        for (int i = 0; i < 10; i++) cards.add(new Card(blackEyedBean));
+        for (int i = 0; i < 8; i++) cards.add(new Card(redBean));
+        for (int i = 0; i < 6; i++) cards.add(new Card(gardenBean));
+
+        // Create Players
+        players = new ArrayList<>();
+        players.add(new Player("Player 1", plantingStrategy, harvestingStrategy, this));
+        players.add(new Player("Player 2", plantingStrategy, harvestingStrategy, this));
+        players.add(new Player("Player 3", plantingStrategy, harvestingStrategy, this));
+
+        // Initialize deck
+        ShufflingStrategy shufflingStrategy = new RandomShuffleStrategy();
+        deck = new Deck(cards, shufflingStrategy, this);
     }
 
     public void startGame() {
-        while (!isGameOver) {
-            for (Player player : players) {
-                playTurn(player);
-            }
+        setupGame();
+
+        for (Player player : players) {
+            player.drawCards(5, deck);
+            System.out.println(player.getName() + " has drawn initial 5 cards.");
         }
-        System.out.println("Game Over. Thank you for playing!");
+        while (!isGameOver()) {
+            System.out.println("\n--- New Turn ---");
+            System.out.println("Current Player: " + players.get(currentPlayerIndex).getName());
+            nextTurn();
+            System.out.println("--- Turn Ended ---\n");
+        }
+        endGame();
+    }
+
+    public void nextTurn() {
+        Player currentPlayer = players.get(currentPlayerIndex);
+        for (GamePhaseStrategy phase : phases) {
+            System.out.println("\nExecuting phase: " + phase.getClass().getSimpleName() + " for player: " + currentPlayer.getName());
+            phase.execute(currentPlayer, this);
+            System.out.println("Phase: " + phase.getClass().getSimpleName() + " completed.");
+        }
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+        roundCount++;
+        System.out.println("Round " + roundCount + " completed.");
+        System.out.println(currentPlayer.getName() + " now has " + currentPlayer.calculateCoins() + " coins.");
+    }
+
+    public void endGame() {
+        Player winner = declareWinner();
+        System.out.println("The winner is: " + winner.getName());
+        for (Player player : players) {
+            System.out.println(player.getName() + " collected " + player.calculateCoins() + " coins.");
+        }
+    }
+
+    public Player declareWinner() {
+        return players.stream()
+                .max(Comparator.comparingInt(Player::calculateCoins))
+                .orElse(null);
+    }
+
+    public boolean isGameOver() {
+        return drawPileReshuffles >= 3;
+    }
+
+    public void incrementReshuffleCount() {
+        drawPileReshuffles++;
+    }
+
+    public int getDrawPileReshuffles() {
+        return drawPileReshuffles;
+    }
+
+    public Deck getDeck() {
+        return deck;
     }
 
     public List<Player> getPlayers() {
         return players;
     }
 
-    public boolean isGameOver() {
-        return isGameOver;
+    public PlantingStrategy getPlantingStrategy() {
+        return plantingStrategy;
+    }
+
+    public HarvestingStrategy getHarvestingStrategy() {
+        return harvestingStrategy;
     }
 
     public static void main(String[] args) {
-        Game game = new Game(5);  // Corrected to 5 players
+        Game game = new Game();
         game.startGame();
     }
 }

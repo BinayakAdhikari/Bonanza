@@ -1,55 +1,49 @@
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Deck {
-    private Stack<Card> drawDeck = new Stack<>();
-    private List<Card> discardDeck = new LinkedList<>();
+    private List<Card> drawPile;
+    private List<Card> discardPile;
     private ShufflingStrategy shufflingStrategy;
-    private int reshuffleCount = 0;
+    private Game game;
 
-    public Deck(ShufflingStrategy strategy) {
-        this.shufflingStrategy = strategy;
-        initializeDeck();
-    }
-
-    private void initializeDeck() {
-        // Populate the draw deck with initial cards
-        for (int i = 0; i < 104; i++) {
-            drawDeck.push(new Card("Bean" + (i % 10), i % 5 + 1));
-        }
+    public Deck(List<Card> cards, ShufflingStrategy shufflingStrategy, Game game) {
+        this.drawPile = new ArrayList<>(cards);
+        this.discardPile = new ArrayList<>();
+        this.shufflingStrategy = shufflingStrategy;
+        this.game = game;
         shuffle();
     }
 
     public void shuffle() {
-        if (!discardDeck.isEmpty()) {
-            drawDeck.addAll(discardDeck);
-            discardDeck.clear();
-            shufflingStrategy.shuffle(drawDeck);
-            reshuffleCount++;
-            System.out.println("Discard deck reshuffled into the draw deck. Reshuffle count: " + reshuffleCount);
-        } else {
-            shufflingStrategy.shuffle(drawDeck);
+        shufflingStrategy.shuffle(drawPile);
+    }
+
+    public Card drawCard() {
+        if (drawPile.isEmpty()) {
+            reshuffleDiscardIntoDraw();
         }
-    }
-
-    public Card draw() {
-        if (drawDeck.isEmpty() && !discardDeck.isEmpty()) {
-            shuffle();  // Reshuffle the discard deck back into the draw deck
+        if (drawPile.isEmpty()) {
+            return null; // No cards left to draw
         }
-        return drawDeck.isEmpty() ? null : drawDeck.pop();
+        return drawPile.remove(0);
     }
 
-    public void discard(Card card) {
-        discardDeck.add(card);
+    public void discardCard(Card card) {
+        discardPile.add(card);
     }
 
-    public int getReshuffleCount() {
-        return reshuffleCount;
+    public void reshuffleDiscardIntoDraw() {
+        if (discardPile.isEmpty()) {
+            return; // Nothing to reshuffle
+        }
+        drawPile.addAll(discardPile);
+        discardPile.clear();
+        shuffle();
+        game.incrementReshuffleCount();
+        System.out.println("Reshuffled the discard pile into the draw pile. Total reshuffles: " + game.getDrawPileReshuffles());
     }
 
-    public boolean isDrawDeckEmpty() {
-        return drawDeck.isEmpty();
+    public boolean isEmpty() {
+        return drawPile.isEmpty() && discardPile.isEmpty();
     }
 }

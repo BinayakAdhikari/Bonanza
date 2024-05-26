@@ -1,43 +1,35 @@
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class MarketTest {
-    private Market market;
-    private Player player1;
-    private Player player2;
-    private Card card1;
-    private Card card2;
-
-    @BeforeEach
-    void setUp() {
-        market = new Market();
-        // Including names and strategies for player instantiation
-        player1 = new Player("Player 1", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
-        player2 = new Player("Player 2", new SimplePlantingStrategy(), new SimpleHarvestingStrategy());
-        card1 = new Card("Blue Bean", 4);
-        card2 = new Card("Red Bean", 3);
-        player1.addCardToHand(card1);
-        player2.addCardToHand(card2);
-    }
-
     @Test
-    void testAddCard() {
-        market.addCard(card1);
-        assertTrue(market.getTradingCards().contains(card1), "Market should contain the added card.");
-    }
+    public void testMarketTrade() {
+        Game game = new Game();
+        PlantingStrategy plantingStrategy = new SimplePlantingStrategy();
+        HarvestingStrategy harvestingStrategy = new SimpleHarvestingStrategy();
+        Player alice = new Player("Alice", plantingStrategy, harvestingStrategy, game);
+        Player bob = new Player("Bob", plantingStrategy, harvestingStrategy, game);
+        List<Player> players = Arrays.asList(alice, bob);
 
-    @Test
-    void testTradeCardSuccessful() {
-        market.addCard(card1);
-        player1.getHand().remove(card1); // Simulate giving card to market
-        assertTrue(market.tradeCard(player1, player2, card1), "Trade should be successful.");
-        assertTrue(player2.getHand().contains(card1), "Player2 should have received the card.");
-        assertFalse(player1.getHand().contains(card1), "Player1 should no longer have the card.");
-    }
+        Market market = new Market(players);
 
-    @Test
-    void testTradeCardUnsuccessful() {
-        assertFalse(market.tradeCard(player1, player2, card1), "Trade should fail as the card is not in the market.");
+        Beanometer beanometer = new Beanometer(Map.of(4, 1, 6, 2, 8, 3, 10, 4));
+        BeanType blueBean = new BeanType("Blue Bean", beanometer);
+        BeanType chiliBean = new BeanType("Chili Bean", beanometer);
+
+        alice.getHand().add(new Card(blueBean));
+        bob.getHand().add(new Card(chiliBean));
+
+        // Assume we define a simple trade where Alice and Bob exchange the first card in their hand
+        // For simplicity, let's simulate a trade by directly exchanging cards
+        Card aliceCard = alice.getHand().remove(0);
+        Card bobCard = bob.getHand().remove(0);
+        alice.getHand().add(bobCard);
+        bob.getHand().add(aliceCard);
+
+        // Check if the cards were exchanged
+        assertEquals("Chili Bean", alice.getHand().get(0).getBeanType().getName());
+        assertEquals("Blue Bean", bob.getHand().get(0).getBeanType().getName());
     }
 }

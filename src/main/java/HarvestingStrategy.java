@@ -1,3 +1,3 @@
 public interface HarvestingStrategy {
-    HarvestResult harvestBeans(Player player, int fieldIndex);
+    HarvestResult harvest(Field field, Player player);
 }
