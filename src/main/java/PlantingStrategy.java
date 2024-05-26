@@ -1,3 +1,3 @@
 public interface PlantingStrategy {
-    void plantBean(Player player, Card card, int fieldIndex);
+    void plant(Card card, Player player);
 }

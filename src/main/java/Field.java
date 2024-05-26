@@ -2,27 +2,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Field {
-    private List<Card> cards = new ArrayList<>();
+    private List<Card> plantedBeans;
 
-    // Adds a card to this field
-    public void plantBean(Card card) {
-        cards.add(card);
+    public Field() {
+        this.plantedBeans = new ArrayList<>();
     }
 
-    // Harvests all cards from this field and returns them
-    public List<Card> harvestBeans() {
-        List<Card> harvested = new ArrayList<>(cards);
-        cards.clear();
-        return harvested;
+    public void addBean(Card card) {
+        plantedBeans.add(card);
     }
 
-    // Returns the current number of beans in the field
-    public int getNumberOfBeans() {
-        return cards.size();
+    public HarvestResult harvestField() {
+        if (plantedBeans.isEmpty()) return new HarvestResult(0, new ArrayList<>());
+        BeanType beanType = plantedBeans.get(0).getBeanType();
+        int coinCount = beanType.getBeanometer().getHarvestValue(plantedBeans.size());
+        List<Card> harvestedCards = new ArrayList<>(plantedBeans);
+        plantedBeans.clear();
+        return new HarvestResult(coinCount, harvestedCards);
     }
 
-    // Provides access to the cards currently in the field
-    public List<Card> getCards() {
-        return new ArrayList<>(cards);
+    public boolean canPlant(Card card) {
+        if (plantedBeans.isEmpty()) return true;
+        return plantedBeans.get(0).getBeanType().equals(card.getBeanType());
+    }
+
+    public String getStatus() {
+        if (plantedBeans.isEmpty()) return "Empty field";
+        return plantedBeans.size() + " " + plantedBeans.get(0).getBeanType().getName() + "(s)";
     }
 }
