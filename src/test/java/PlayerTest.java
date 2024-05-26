@@ -10,7 +10,7 @@ public class PlayerTest {
 
         Player player = game.getPlayers().get(0);
 
-        assertEquals("Alice", player.getName());
+        assertEquals("Player 1", player.getName());
         assertTrue(player.getHand().isEmpty());
         assertEquals(2, player.getFields().size());
 

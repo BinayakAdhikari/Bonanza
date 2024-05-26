@@ -9,7 +9,6 @@ public class Game {
     private int currentPlayerIndex;
     private int roundCount;
     private int drawPileReshuffles;
-    private final int MAX_ROUNDS = 20; // Example value for maximum rounds
     private List<GamePhaseStrategy> phases;
     private PlantingStrategy plantingStrategy;
     private HarvestingStrategy harvestingStrategy;
@@ -108,8 +107,9 @@ public class Game {
 
         // Create Players
         players = new ArrayList<>();
-        players.add(new Player("Alice", plantingStrategy, harvestingStrategy, this));
-        players.add(new Player("Bob", plantingStrategy, harvestingStrategy, this));
+        players.add(new Player("Player 1", plantingStrategy, harvestingStrategy, this));
+        players.add(new Player("Player 2", plantingStrategy, harvestingStrategy, this));
+        players.add(new Player("Player 3", plantingStrategy, harvestingStrategy, this));
 
         // Initialize deck
         ShufflingStrategy shufflingStrategy = new RandomShuffleStrategy();
@@ -124,8 +124,10 @@ public class Game {
             System.out.println(player.getName() + " has drawn initial 5 cards.");
         }
         while (!isGameOver()) {
-            System.out.println("Starting new turn for player: " + players.get(currentPlayerIndex).getName());
+            System.out.println("\n--- New Turn ---");
+            System.out.println("Current Player: " + players.get(currentPlayerIndex).getName());
             nextTurn();
+            System.out.println("--- Turn Ended ---\n");
         }
         endGame();
     }
@@ -133,8 +135,9 @@ public class Game {
     public void nextTurn() {
         Player currentPlayer = players.get(currentPlayerIndex);
         for (GamePhaseStrategy phase : phases) {
-            System.out.println("Executing phase: " + phase.getClass().getSimpleName() + " for player: " + currentPlayer.getName());
+            System.out.println("\nExecuting phase: " + phase.getClass().getSimpleName() + " for player: " + currentPlayer.getName());
             phase.execute(currentPlayer, this);
+            System.out.println("Phase: " + phase.getClass().getSimpleName() + " completed.");
         }
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
         roundCount++;

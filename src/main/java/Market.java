@@ -1,5 +1,4 @@
 import java.util.List;
-import java.util.ArrayList;
 
 public class Market {
     private List<Player> players;
@@ -9,6 +8,18 @@ public class Market {
     }
 
     public void trade(Player currentPlayer) {
-        // Trading logic here
+        System.out.println("[" + currentPlayer.getName() + "] is trading...");
+        // Implement trade logic here
+        // Example: trade first card from currentPlayer's hand with the first card from the next player's hand
+        for (Player player : players) {
+            if (player != currentPlayer && !player.getHand().isEmpty()) {
+                Card currentPlayerCard = currentPlayer.getHand().remove(0);
+                Card playerCard = player.getHand().remove(0);
+                currentPlayer.getHand().add(playerCard);
+                player.getHand().add(currentPlayerCard);
+                System.out.println("[" + currentPlayer.getName() + "] trades " + currentPlayerCard.getBeanType().getName() + " with " + player.getName() + " for " + playerCard.getBeanType().getName());
+                break;
+            }
+        }
     }
 }
