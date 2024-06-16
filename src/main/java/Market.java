@@ -1,25 +1,40 @@
-import java.util.List;
-
 public class Market {
-    private List<Player> players;
+	
+	private int tradeAreaNum;	//the trading area number
+	private Card card;			//the card in the trading area
+	
+	//constructor
+	public Market(int tradeAreaNum){
+		this.tradeAreaNum = tradeAreaNum;
+	}
+	
+	//getters and setters for the trading area number
+	public int getTradeAreaNum() {
+		return tradeAreaNum;
+	}
 
-    public Market(List<Player> players) {
-        this.players = players;
-    }
+	public void setTradeAreaNum(int tradeAreaNum) {
+		this.tradeAreaNum = tradeAreaNum;
+	}
 
-    public void trade(Player currentPlayer) {
-        System.out.println("[" + currentPlayer.getName() + "] is trading...");
-        // Implement trade logic here
-        // Example: trade first card from currentPlayer's hand with the first card from the next player's hand
-        for (Player player : players) {
-            if (player != currentPlayer && !player.getHand().isEmpty()) {
-                Card currentPlayerCard = currentPlayer.getHand().remove(0);
-                Card playerCard = player.getHand().remove(0);
-                currentPlayer.getHand().add(playerCard);
-                player.getHand().add(currentPlayerCard);
-                System.out.println("[" + currentPlayer.getName() + "] trades " + currentPlayerCard.getBeanType().getName() + " with " + player.getName() + " for " + playerCard.getBeanType().getName());
-                break;
-            }
-        }
-    }
+	//getters and setters for the card in the trading area
+	public Card getCard(){
+		return card;
+	}
+
+	//adds card into the trading area
+	public void addCard(Card card) {
+		this.card = card;
+	}
+	
+	//removes card from the trading area
+	public void removeCard(){
+		this.card = null;
+	}
+	
+	//checks if the trading area is empty
+	public boolean isEmpty(){
+		return (card == null) ? true : false;
+	}
+	
 }

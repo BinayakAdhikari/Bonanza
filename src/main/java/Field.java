@@ -1,45 +1,63 @@
-import java.util.ArrayList;
-import java.util.List;
+public class Field{
+	
+	private Card cardType;		//holds the type of card in the field
+	private int numCards = 0;	//holds the number of cards in the field
+	private int fieldNumber;	//differentiates the two fields
 
-public class Field {
-    private List<Card> beans;
+	//constructor that sets field number
+	public Field(int fieldNumber){
+		setFieldNumber(fieldNumber);
+	}
 
-    public Field() {
-        this.beans = new ArrayList<>();
-    }
+	//The getters and setters for card types
+	public Card getCardType() {
+		return cardType;
+	}
 
-    public boolean canPlant(Card card) {
-        return beans.isEmpty() || beans.get(0).getBeanType().equals(card.getBeanType());
-    }
+	public void setCardType(Card cardType) {
+		this.cardType = cardType;
+	}
 
-    public void addBean(Card card) {
-        beans.add(card);
-    }
+	//The getters and setters for number of cards
+	public int getNumCards() {
+		return numCards;
+	}
 
-    public List<Card> getBeans() {
-        return beans;
-    }
+	public void setNumCards(int numCards) {
+		this.numCards = numCards;
+	}
 
-    public void clear() {
-        beans.clear();
-    }
+	//The getters and setters for field number
+	public int getFieldNumber() {
+		return fieldNumber;
+	}
 
-    public HarvestResult harvestField() {
-        int beanCount = beans.size();
-        BeanType beanType = beans.get(0).getBeanType();
-        int coins = beanType.getBeanometer().getHarvestValue(beanCount);
+	public void setFieldNumber(int fieldNumber) {
+		this.fieldNumber = fieldNumber;
+	}
+	
+	//increments the number of cards in field when cards are planted
+	public void increaseNumCards(int numCards) {
+		this.numCards += numCards;
+	}
+	
+	//checks if a card is valid to be planted in a field 
+	public boolean cardCheck(Card card){
+		return (cardType == null || cardType.getCardName() == card.getCardName()) ? true : false;
+	}
 
-        List<Card> harvestedCards = new ArrayList<>(beans);
-        clear();
+	//checks if a field is empty
+	public boolean isEmpty(){
+		return (cardType == null) ? true : false;
+	}
 
-        return new HarvestResult(coins, harvestedCards);
-    }
-
-    public String getStatus() {
-        if (beans.isEmpty()) {
-            return "Empty field";
-        }
-        BeanType beanType = beans.get(0).getBeanType();
-        return beans.size() + " " + beanType.getName() + "(s)";
-    }
+	//distributes coins to players when they harvest thier fields
+	public int coinFromHarvest(){
+		//checks the coin value of the field and returns the value
+		for(int n = 4; n > 0; n--){
+			if(numCards >= cardType.getCoin()[n])
+				return n;
+		}
+		return 0;
+	}
 }

@@ -1,21 +1,32 @@
 public class Card {
-    private BeanType beanType;
-    private boolean isCoin;
 
-    public Card(BeanType beanType) {
-        this.beanType = beanType;
-        this.isCoin = false;
-    }
+	private String cardName;
+	private int numberOfCards;
+	private int[] coin;
 
-    public BeanType getBeanType() {
-        return beanType;
-    }
+	// Constructor
+	public Card(int cardType) {
+		setCardDetails(cardType);
+	}
 
-    public boolean isCoin() {
-        return isCoin;
-    }
+	// Sets card details using the Beanometer
+	private void setCardDetails(int cardType) {
+		Object[] beanDetails = Beanometer.getBeanDetails(cardType);
+		this.cardName = (String) beanDetails[0];
+		this.numberOfCards = (Integer) beanDetails[1];
+		this.coin = (int[]) beanDetails[2];
+	}
 
-    public void setCoin(boolean coin) {
-        isCoin = coin;
-    }
+	// Getters
+	public String getCardName() {
+		return cardName;
+	}
+
+	public int getNumberOfCards() {
+		return numberOfCards;
+	}
+
+	public int[] getCoin() {
+		return coin;
+	}
 }

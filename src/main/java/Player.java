@@ -1,157 +1,123 @@
-import java.util.ArrayList;
-import java.util.List;
 
-public class Player {
-    private String name;
-    private List<Card> hand;
-    private List<Field> fields;
-    private List<Card> coins;
-    private boolean isStartingPlayer;
-    private PlantingStrategy plantingStrategy;
-    private HarvestingStrategy harvestingStrategy;
-    private Game currentGame;
+public class Player implements Decisions{
+	
+	protected int playerNum;
+	protected int treasury = 0;
+	protected Hand hand = new Hand();
+	protected Field[] fields = new Field[2];
+	protected Market[] markets = new Market[2];
+	protected Field[][] allFields = new Field[4][2]; //first index is player num  //Second index is fieldnum
+	protected Deck deck;
+	
+	public Player(int playerNum, Deck deck){
+		setPlayerNum(playerNum);
+		setPile(deck);
+		for(int n = 0; n < 2; n++){
+			fields[n] = new Field(n);
+			markets[n] = new Market(n);
+		}
+			
+	}
+	
+	/** getters and setters **/
+	public Deck getPile() {
+		return deck;
+	}
 
-    public Player(String name, PlantingStrategy plantingStrategy, HarvestingStrategy harvestingStrategy, Game currentGame) {
-        this.name = name;
-        this.hand = new ArrayList<>();
-        this.fields = new ArrayList<>();
-        this.coins = new ArrayList<>();
-        this.isStartingPlayer = false;
-        this.plantingStrategy = plantingStrategy;
-        this.harvestingStrategy = harvestingStrategy;
-        this.fields.add(new Field());
-        this.fields.add(new Field());
-        this.currentGame = currentGame;
-    }
+	public void setPile(Deck deck) {
+		this.deck = deck;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Field[][] getAllFields() {
+		return allFields;
+	}
 
-    public List<Card> getHand() {
-        return hand;
-    }
+	public void setAllFields(Field[][] allFields) {
+		this.allFields = allFields;
+	}
 
-    public List<Field> getFields() {
-        return fields;
-    }
+	public int getPlayerNum() {
+		return playerNum;
+	}
 
-    public List<Card> getCoins() {
-        return coins;
-    }
+	public void setPlayerNum(int playerNum) {
+		this.playerNum = playerNum;
+	}
 
-    public boolean isStartingPlayer() {
-        return isStartingPlayer;
-    }
+	public int getTreasury() {
+		return treasury;
+	}
 
-    public void setStartingPlayer(boolean startingPlayer) {
-        isStartingPlayer = startingPlayer;
-    }
+	public void setTreasury(int treasury) {
+		this.treasury = treasury;
+	}
+	
+	public void addTreasury(int treasury) {
+		this.treasury = this.treasury + treasury;
+	}
 
-    public void plantBeanFromHand() {
-        if (hand.isEmpty()) return;
-        Card firstCard = hand.remove(0);
-        System.out.println("[" + name + "] plants " + firstCard.getBeanType().getName() + " from hand.");
-        plantingStrategy.plant(firstCard, this);
-        if (!hand.isEmpty()) {
-            Card secondCard = hand.remove(0);
-            System.out.println("[" + name + "] plants " + secondCard.getBeanType().getName() + " from hand.");
-            plantingStrategy.plant(secondCard, this);
-        }
-    }
+	public Hand getHand() {
+		return hand;
+	}
 
-    public void turnOverAndTradeBeans(Game game) {
-        Market market = new Market(game.getPlayers());
-        List<Card> turnedOverCards = new ArrayList<>();
-        for (int i = 0; i < 2; i++) {
-            Card card = game.getDeck().drawCard();
-            if (card != null) {
-                turnedOverCards.add(card);
-                System.out.println("[" + name + "] turns over " + card.getBeanType().getName() + " from the deck.");
-            }
-        }
-        market.trade(this);
-        for (Card card : turnedOverCards) {
-            System.out.println("[" + name + "] plants turned over " + card.getBeanType().getName() + " from the deck.");
-            plantingStrategy.plant(card, this);
-        }
-    }
+	public void setHand(Hand hand) {
+		this.hand = hand;
+	}
 
-    public void plantTurnedOverAndTradedBeans() {
-        // Implement logic to plant turned-over and traded beans if needed
-    }
+	public Field[] getFields() {
+		return fields;
+	}
 
-    public void drawCards(int num, Deck deck) {
-        for (int i = 0; i < num; i++) {
-            Card card = deck.drawCard();
-            if (card != null) {
-                hand.add(card);
-                System.out.println("[" + name + "] draws " + card.getBeanType().getName() + " from the deck.");
-            }
-        }
-    }
+	public void setFields(Field[] fields) {
+		this.fields = fields;
+	}
 
-    public int calculateCoins() {
-        return coins.size();
-    }
+	public Market[] getTradingArea() {
+		return markets;
+	}
 
-    public String getFieldStatus() {
-        StringBuilder status = new StringBuilder();
-        for (Field field : fields) {
-            status.append(field.getStatus()).append("\n");
-        }
-        return status.toString();
-    }
+	public void setTradingArea(Market[] markets) {
+		this.markets = markets;
+	}
 
-    public void plantBean(BeanType beanType) {
-        for (Field field : fields) {
-            if (field.canPlant(new Card(beanType))) {
-                field.addBean(new Card(beanType));
-                System.out.println("[" + name + "] plants " + beanType.getName() + " in a field.");
-                return;
-            }
-        }
-        Field firstField = fields.get(0);
-        if (!firstField.getBeans().isEmpty()) {
-            HarvestResult result = harvestingStrategy.harvest(firstField, this);
-            coins.addAll(result.getHarvestedCards());
-            System.out.println("[" + name + "] harvests " + firstField.getBeans().size() + " " + firstField.getBeans().get(0).getBeanType().getName() + "(s) and gains " + result.getCoins() + " coin(s).");
-            discardRemainingCards(result.getHarvestedCards());
-        }
-        firstField.addBean(new Card(beanType));
-        System.out.println("[" + name + "] plants " + beanType.getName() + " in the newly harvested field.");
-    }
+	
+	/** methods **/
+	public boolean plantDecide(Card card) {
+		return false;
+	}
+	
+	public Field pickFieldToPlant(Card card) {
+		return null;
+	}
+	
+	public boolean sendTradeRequest(Card card) {
+		return false;
+	}
 
-    public void receiveTrade(List<Card> cards) {
-        for (Card card : cards) {
-            System.out.println("[" + name + "] receives " + card.getBeanType().getName() + " from trade.");
-            plantBean(card.getBeanType());
-        }
-    }
+	public int acceptTradeRequest(Card[][] tradeCards) {
+		return 0;
+	}
 
-    public void giveGift(List<Card> cards, Player player) {
-        for (Card card : cards) {
-            hand.remove(card);
-            player.takeGift(card);
-            System.out.println("[" + name + "] gives " + card.getBeanType().getName() + " to " + player.getName() + " as a gift.");
-        }
-    }
 
-    public void takeGift(Card card) {
-        hand.add(card);
-        System.out.println("[" + name + "] takes " + card.getBeanType().getName() + " as a gift.");
-    }
+	public boolean sendTradeRequest(Card card, Player player) {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-    private void discardRemainingCards(List<Card> harvestedCards) {
-        for (Card card : harvestedCards) {
-            if (!card.isCoin()) {
-                currentGame.getDeck().discardCard(card);
-                System.out.println("[" + name + "] discards " + card.getBeanType().getName() + " card.");
-            }
-        }
-    }
+	public Card pickCardToTrade(Player player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    Game getCurrentGame() {
-        return currentGame;
-    }
+	public boolean plantDecideTA(Card card) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
+	
+
+
+
+
+
