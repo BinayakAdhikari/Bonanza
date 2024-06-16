@@ -1,11 +1,7 @@
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
@@ -17,10 +13,7 @@ public class GUI implements ActionListener {
 
 	private JFrame frame = new JFrame();
 	private JPanel panel = new JPanel();
-	private JButton helpButton = new JButton();
 	private JLabel backgroundLabel = new JLabel();
-	//The sound files used in this class
-	private File plantingSound = new File ("sounds/Plant Growing Sound Effect.wav");
 
 	//Game timer
 	private Timer gameTimer = new Timer(1000, this); // timer for the gametime
@@ -92,7 +85,7 @@ public class GUI implements ActionListener {
 			aiTurn(players[2]); // Parth's AI
 			if (deck.getRefillCount() == 3)
 				break;
-			currentPlayerLabel.setText("Tony AI's Turn");
+			currentPlayerLabel.setText("AI's Turn");
 //			JOptionPane.showMessageDialog(frame, "Tony AI's Turn!");
 			aiTurn(players[3]); // Tony's AI
 		} while (deck.getRefillCount() < 3);
@@ -340,17 +333,6 @@ public class GUI implements ActionListener {
 		frame.add(panel);
 		panel.setBackground(Color.WHITE);
 		panel.setVisible(true);
-		
-		//Setting up help button
-		helpButton.setBounds(1580, 10, 65, 65);
-		helpButton.setText("HELP");
-		helpButton.setVisible(true);
-		helpButton.addActionListener(this);
-		helpButton.setBackground(Color.YELLOW);
-		helpButton.setForeground(Color.ORANGE);
-		helpButton.setBorder(null);
-		helpButton.setFocusPainted(false);
-		panel.add(helpButton);
 		
 		//Setting up stop planting button (if the user only wants to plant one card and not 2)
 		stopPlantingButton.setBounds(1100, 700, 200, 100);
@@ -698,7 +680,6 @@ public class GUI implements ActionListener {
 				for (int j = 0; j < 2; j ++)
 					players[i].allFields[h][j] = players[h].getFields()[j];
 
-		playPlantingSound(plantingSound);
 	}
 
 	public void harvest(Player player, Field field) {
@@ -715,7 +696,7 @@ public class GUI implements ActionListener {
 	}
 
 	//Sets the deciding which to plant to buttons for human player invisible
-	private void decideButtonsVisibility(Boolean field1, Boolean field2, Boolean tradingArea) {
+	private void decideButtonsVisibility(Boolean field1, Boolean field2) {
 		fieldDecideButtons[0].setVisible(field1);
 		fieldDecideButtons[1].setVisible(field2);
 	}
@@ -733,17 +714,7 @@ public class GUI implements ActionListener {
 			}
 		}
 
-		if (event.getSource() == helpButton) {
-			//Opens a web link
-			try {         
-			     java.awt.Desktop.getDesktop().browse(java.net.URI.create("http://www.google.com"));
-			   }
-			   catch (java.io.IOException e) {
-			       System.out.println(e.getMessage());
-			   }
-
-			// if the first card in the hand pile is clicked
-		}else if (event.getSource() == stopPlantingButton) {
+		if (event.getSource() == stopPlantingButton) {
 			//Disables buttons and allows human to press the draw pile
 			drawPileButton.setEnabled(true);
 			humanPlantTimes = 0;
@@ -756,7 +727,7 @@ public class GUI implements ActionListener {
 		} else if (event.getSource() == handButtons.get(0).get(0)) {
 			if (humanTurnStage != 3) {
 				if (currentCard == null) {
-					decideButtonsVisibility(true, true, false);
+					decideButtonsVisibility(true, true);
 					currentCard = players[0].getHand().getCard(0);
 				}
 			}
@@ -785,7 +756,7 @@ public class GUI implements ActionListener {
 				//plant the card into the selected field and update hand
 				plant(players[0], players[0].getFields()[i], currentCard);
 				currentCard = null;
-				decideButtonsVisibility(false, false, false);
+				decideButtonsVisibility(false, false);
 				removeCardFromHand(0, players[0]);
 
 				humanPlantTimes++;
@@ -806,7 +777,7 @@ public class GUI implements ActionListener {
 		for (int i = 0; i < tradingAreaLabel.length; i ++) {
 			if (event.getSource() == tradingAreaLabel[i]) {
 				currentCard = players[0].getTradingArea()[i].getCard();
-				decideButtonsVisibility(true, true, false);
+				decideButtonsVisibility(true, true);
 				removeCardFromTradingArea(players[0].getTradingArea()[i]);
 			}
 		}
@@ -831,32 +802,6 @@ public class GUI implements ActionListener {
 				}
 				tradeRequestLabel[i].setIcon(null);
 			}
-		}
-	}
-
-	// method that plays the planting sound when called
-	private static void playPlantingSound(File Sound) {
-		try {
-			Clip clip = AudioSystem.getClip();
-			clip.open(AudioSystem.getAudioInputStream(Sound));
-			clip.start();
-			// if audio file not found, shows that it is an error
-		} catch (Exception e) {
-		}
-	}
-
-	// plays music from a sound file (background music)
-	private static void playBackgroundMusic(File Sound) {
-		try {
-			Clip clip = AudioSystem.getClip();
-			clip.open(AudioSystem.getAudioInputStream(Sound));
-			clip.start();
-			clip.loop(1000000000);
-			// reduce the volume of the audio clip
-			FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-			gainControl.setValue(-10.0f); // Reduce volume by 20 decibels.
-			// if audio file not found, shows that it is an error
-		} catch (Exception e) {
 		}
 	}
 }

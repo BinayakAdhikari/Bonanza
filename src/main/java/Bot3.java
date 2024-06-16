@@ -1,3 +1,5 @@
+// This AI calculates the potential value of each card in various game contexts,
+// prioritizing moves that maximize future coin gains.
 public class Bot3 extends Player implements Decisions{
 
 	/**constructor**/

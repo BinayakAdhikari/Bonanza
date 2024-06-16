@@ -10,16 +10,12 @@ public class Deck {
 		return drawPile;
 	}
 
-	public void setDrawPile(ArrayList<Card> drawPile) {
-		this.drawPile = drawPile;
-	}
-
 	private ArrayList<Card> discardPile = new ArrayList<Card>();//Holds dicarded cards.
 	private int refillCount = 0;								//Used to count when deck is refilled
 
 	public Deck(){
 		//
-		for(int cardType = 1; cardType <=8; cardType++){
+		for(int cardType = 0; cardType <=7; cardType++){
 			cardArrayObject[cardType] = new Card(cardType);
 			for(int numberOfCards = 1; numberOfCards <= cardArrayObject[cardType].getNumberOfCards();numberOfCards++){
 				drawPile.add(cardArrayObject[cardType]);
@@ -76,9 +72,4 @@ public class Deck {
 	public int getRefillCount() {
 		return refillCount;
 	}
-
-	public void setRefillCount(int refillCount) {
-		this.refillCount = refillCount;
-	}
-
 }

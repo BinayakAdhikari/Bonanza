@@ -1,67 +1,32 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
 public class Card {
 
-	private String cardName;		//name of the card
-	private int numberOfCards;		//the number of that card in the game
-	private int[] coin = new int[5];//holds the coin values from the card
-	
-	//constructor
-	public Card(int cardType){
+	private String cardName;
+	private int numberOfCards;
+	private int[] coin;
 
-		Scanner inputFile = null;
-
-		try {
-
-			inputFile = new Scanner(new File("cards.txt")).useDelimiter(",");
-			
-			//reads in text file by row
-			for(int row = 1; row < cardType; row++){
-				inputFile.nextLine();
-			}
-			
-			//sets the card name, number of cards and the coin values
-			setCardName(inputFile.next());
-			setNumberOfCards(Integer.valueOf(inputFile.next()));
-			for(int coinNumber = 1; coinNumber < 5; coinNumber++)
-				coin[coinNumber] = Integer.valueOf(inputFile.next());
-			
-
-		} catch (FileNotFoundException error) {
-
-			System.err.println("File not found - check the file name");
-
-		}
-		
+	// Constructor
+	public Card(int cardType) {
+		setCardDetails(cardType);
 	}
 
-	//getters and setters for the card name
+	// Sets card details using the Beanometer
+	private void setCardDetails(int cardType) {
+		Object[] beanDetails = Beanometer.getBeanDetails(cardType);
+		this.cardName = (String) beanDetails[0];
+		this.numberOfCards = (Integer) beanDetails[1];
+		this.coin = (int[]) beanDetails[2];
+	}
+
+	// Getters
 	public String getCardName() {
 		return cardName;
 	}
 
-	public void setCardName(String cardName) {
-		this.cardName = cardName;
-	}
-
-	//getters and setters for the number of cards
 	public int getNumberOfCards() {
 		return numberOfCards;
 	}
 
-	public void setNumberOfCards(int numberOfCards) {
-		this.numberOfCards = numberOfCards;
-	}
-
-	//getters and setters for the coin values
 	public int[] getCoin() {
 		return coin;
 	}
-
-	public void setCoin(int[] coin) {
-		this.coin = coin;
-	}
-
 }
