@@ -18,7 +18,7 @@ public class Deck {
         shufflingStrategy.shuffle(drawPile);
     }
 
-    public Card drawCard() {
+    public Card draw() {
         if (drawPile.isEmpty()) {
             reshuffleDiscardIntoDraw();
         }
@@ -45,5 +45,9 @@ public class Deck {
 
     public boolean isEmpty() {
         return drawPile.isEmpty() && discardPile.isEmpty();
+    }
+
+    public List<Card> getDiscardPile() {
+        return discardPile;
     }
 }

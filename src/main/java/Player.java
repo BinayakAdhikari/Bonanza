@@ -64,7 +64,7 @@ public class Player {
         Market market = new Market(game.getPlayers());
         List<Card> turnedOverCards = new ArrayList<>();
         for (int i = 0; i < 2; i++) {
-            Card card = game.getDeck().drawCard();
+            Card card = game.getDeck().draw();
             if (card != null) {
                 turnedOverCards.add(card);
                 System.out.println("[" + name + "] turns over " + card.getBeanType().getName() + " from the deck.");
@@ -83,7 +83,7 @@ public class Player {
 
     public void drawCards(int num, Deck deck) {
         for (int i = 0; i < num; i++) {
-            Card card = deck.drawCard();
+            Card card = deck.draw();
             if (card != null) {
                 hand.add(card);
                 System.out.println("[" + name + "] draws " + card.getBeanType().getName() + " from the deck.");
@@ -114,7 +114,7 @@ public class Player {
         Field firstField = fields.get(0);
         if (!firstField.getBeans().isEmpty()) {
             HarvestResult result = harvestingStrategy.harvest(firstField, this);
-            coins.addAll(result.getHarvestedCards());
+            coins.addAll(new ArrayList<>(result.getHarvestedCards()));
             System.out.println("[" + name + "] harvests " + firstField.getBeans().size() + " " + firstField.getBeans().get(0).getBeanType().getName() + "(s) and gains " + result.getCoins() + " coin(s).");
             discardRemainingCards(result.getHarvestedCards());
         }
@@ -151,7 +151,28 @@ public class Player {
         }
     }
 
-    Game getCurrentGame() {
+    public Game getCurrentGame() {
         return currentGame;
+    }
+
+    public void checkAndGiveBeanToAllMafias(List<BeanMafiaBoss> bosses) {
+        for (BeanMafiaBoss boss : bosses) {
+            checkAndGiveBeanToMafia(boss);
+        }
+    }
+
+    public void checkAndGiveBeanToMafia(BeanMafiaBoss boss) {
+        System.out.println("MAFIA [" + name + "] checking fields to give beans to " + boss.getName());
+        for (Field field : fields) {
+            while (!field.getBeans().isEmpty()) {
+                Card beanCard = field.getBeans().remove(0);
+                boss.plantBean(beanCard);
+                System.out.println("MAFIA [" + name + "] gives a " + beanCard.getBeanType().getName() + " bean to " + boss.getName() + ".");
+            }
+        }
+    }
+
+    public void useBeansFromPreviousTurn() {
+        // Implement logic for using beans left over from the previous turn if needed
     }
 }
