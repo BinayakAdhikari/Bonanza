@@ -14,7 +14,7 @@ public class DeckTest {
         Deck deck = new Deck(cards, shufflingStrategy, game);
         assertFalse(deck.isEmpty());
 
-        Card drawnCard = deck.drawCard();
+        Card drawnCard = deck.draw();
         assertNotNull(drawnCard);
 
         deck.discardCard(drawnCard);
