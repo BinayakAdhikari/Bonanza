@@ -184,6 +184,7 @@ public class Game {
         setupGame();
 
         for (Player player : players) {
+            new Thread(new GameUserInterface(players.indexOf(player))).start();
             player.drawCards(5, deck);
             System.out.println(player.getName() + " has drawn initial 5 cards.");
         }
