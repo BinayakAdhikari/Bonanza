@@ -8,6 +8,7 @@ public class BeanMafiaBossTest {
     private BeanMafiaBoss boss;
     private List<Card> discardPile;
     private Beanometer beanometer;
+    private MafiaBossHarvestingStrategy harvestingStrategy = new MafiaBossHarvestingStrategy();
 
     @BeforeEach
     public void setUp() {
@@ -54,7 +55,7 @@ public class BeanMafiaBossTest {
         for (int i = 0; i < 5; i++) {
             boss.plantBean(new Card(new BeanType("Black Bean", beanometer)));
         }
-        boss.harvest(discardPile);
+        harvestingStrategy.harvestMafia(boss, discardPile);
         assertEquals(2, boss.getCoins());
         assertTrue(boss.getField().isEmpty());
         assertEquals(5, discardPile.size());
@@ -65,7 +66,7 @@ public class BeanMafiaBossTest {
         for (int i = 0; i < 3; i++) {
             boss.plantBean(new Card(new BeanType("Black Bean", beanometer)));
         }
-        boss.harvest(discardPile);
+        harvestingStrategy.harvestMafia(boss, discardPile);
         assertEquals(0, boss.getCoins());
         assertFalse(boss.getField().isEmpty());
         assertEquals(0, discardPile.size());

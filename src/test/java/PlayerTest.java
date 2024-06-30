@@ -10,6 +10,7 @@ public class PlayerTest {
     private Beanometer beanometer;
     private BeanType beanType;
     private Card card;
+    private MafiaBossHarvestingStrategy harvestingStrategy = new MafiaBossHarvestingStrategy();
 
     @BeforeEach
     public void setUp() {
@@ -61,7 +62,7 @@ public class PlayerTest {
         assertTrue(mafiaBoss.shouldHarvest());
 
         List<Card> discardPile = new ArrayList<>();
-        mafiaBoss.harvest(discardPile);
+        harvestingStrategy.harvestMafia(mafiaBoss, discardPile);
 
         assertEquals(1, mafiaBoss.getCoins());
         assertTrue(mafiaBoss.getField().isEmpty());
