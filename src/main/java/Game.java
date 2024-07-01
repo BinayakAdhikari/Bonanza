@@ -44,7 +44,7 @@ public class Game {
         blueBeanometerMap.put(8, 3);
         blueBeanometerMap.put(10, 4);
         Beanometer blueBeanometer = new Beanometer(blueBeanometerMap);
-        BeanType blueBean = new BeanType("Blue Bean", blueBeanometer);
+        BeanType blueBean = new BeanType("BLAUE_BOHNE", blueBeanometer);
 
         Map<Integer, Integer> chiliBeanometerMap = new HashMap<>();
         chiliBeanometerMap.put(3, 1);
@@ -60,7 +60,7 @@ public class Game {
         stinkBeanometerMap.put(7, 3);
         stinkBeanometerMap.put(8, 4);
         Beanometer stinkBeanometer = new Beanometer(stinkBeanometerMap);
-        BeanType stinkBean = new BeanType("Stink Bean", stinkBeanometer);
+        BeanType stinkBean = new BeanType("SAU_BOHNE", stinkBeanometer);
 
         Map<Integer, Integer> greenBeanometerMap = new HashMap<>();
         greenBeanometerMap.put(3, 1);
@@ -68,7 +68,7 @@ public class Game {
         greenBeanometerMap.put(6, 3);
         greenBeanometerMap.put(7, 4);
         Beanometer greenBeanometer = new Beanometer(greenBeanometerMap);
-        BeanType greenBean = new BeanType("Green Bean", greenBeanometer);
+        BeanType greenBean = new BeanType("BRECH_BOHNE", greenBeanometer);
 
         Map<Integer, Integer> soyBeanometerMap = new HashMap<>();
         soyBeanometerMap.put(2, 1);
@@ -76,7 +76,7 @@ public class Game {
         soyBeanometerMap.put(6, 3);
         soyBeanometerMap.put(7, 4);
         Beanometer soyBeanometer = new Beanometer(soyBeanometerMap);
-        BeanType soyBean = new BeanType("Soy Bean", soyBeanometer);
+        BeanType soyBean = new BeanType("SOJA_BOHNE", soyBeanometer);
 
         Map<Integer, Integer> blackEyedBeanometerMap = new HashMap<>();
         blackEyedBeanometerMap.put(2, 1);
@@ -84,7 +84,7 @@ public class Game {
         blackEyedBeanometerMap.put(5, 3);
         blackEyedBeanometerMap.put(6, 4);
         Beanometer blackEyedBeanometer = new Beanometer(blackEyedBeanometerMap);
-        BeanType blackEyedBean = new BeanType("Black-Eyed Bean", blackEyedBeanometer);
+        BeanType blackEyedBean = new BeanType("AUGEN_BOHNE", blackEyedBeanometer);
 
         Map<Integer, Integer> redBeanometerMap = new HashMap<>();
         redBeanometerMap.put(2, 1);
@@ -92,7 +92,7 @@ public class Game {
         redBeanometerMap.put(4, 3);
         redBeanometerMap.put(5, 4);
         Beanometer redBeanometer = new Beanometer(redBeanometerMap);
-        BeanType redBean = new BeanType("Red Bean", redBeanometer);
+        BeanType redBean = new BeanType("ROTE_BOHNE", redBeanometer);
 
         Map<Integer, Integer> gardenBeanometerMap = new HashMap<>();
         gardenBeanometerMap.put(2, 1);
@@ -100,7 +100,7 @@ public class Game {
         gardenBeanometerMap.put(4, 3);
         gardenBeanometerMap.put(5, 4);
         Beanometer gardenBeanometer = new Beanometer(gardenBeanometerMap);
-        BeanType gardenBean = new BeanType("Garden Bean", gardenBeanometer);
+        BeanType gardenBean = new BeanType("GARTEN_BOHNE", gardenBeanometer);
 
         // Add beans from Al Cabohne extension
         Map<Integer, Integer> kidneyBeanometerMap = new HashMap<>();
@@ -109,7 +109,7 @@ public class Game {
         kidneyBeanometerMap.put(9, 3);
         kidneyBeanometerMap.put(11, 4);
         Beanometer kidneyBeanometer = new Beanometer(kidneyBeanometerMap);
-        BeanType kidneyBean = new BeanType("Kidney Bean", kidneyBeanometer);
+        BeanType kidneyBean = new BeanType("KIDNEY_BOHNE", kidneyBeanometer);
 
         Map<Integer, Integer> fireBeanometerMap = new HashMap<>();
         fireBeanometerMap.put(3, 1);
@@ -117,7 +117,7 @@ public class Game {
         fireBeanometerMap.put(8, 3);
         fireBeanometerMap.put(10, 4);
         Beanometer fireBeanometer = new Beanometer(fireBeanometerMap);
-        BeanType fireBean = new BeanType("Fire Bean", fireBeanometer);
+        BeanType fireBean = new BeanType("FEUER_BOHNE", fireBeanometer);
 
         Map<Integer, Integer> puffBeanometerMap = new HashMap<>();
         puffBeanometerMap.put(2, 1);
@@ -125,7 +125,7 @@ public class Game {
         puffBeanometerMap.put(6, 3);
         puffBeanometerMap.put(8, 4);
         Beanometer puffBeanometer = new Beanometer(puffBeanometerMap);
-        BeanType puffBean = new BeanType("Puff Bean", puffBeanometer);
+        BeanType puffBean = new BeanType("PUFF_BOHNE", puffBeanometer);
 
         Map<Integer, Integer> broadBeanometerMap = new HashMap<>();
         broadBeanometerMap.put(3, 1);
@@ -183,8 +183,9 @@ public class Game {
     public void startGame() {
         setupGame();
 
+        new Thread(new UserInterface(players)).start();
+
         for (Player player : players) {
-            new Thread(new GameUserInterface(players.indexOf(player))).start();
             player.drawCards(5, deck);
             System.out.println(player.getName() + " has drawn initial 5 cards.");
         }
