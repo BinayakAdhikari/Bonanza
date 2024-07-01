@@ -15,6 +15,7 @@ public class SimplePlantingStrategy implements PlantingStrategy {
         if (!planted) {
             Field firstField = player.getFields().get(0);
             if (!firstField.getBeans().isEmpty()) {
+                player.getCurrentGame().setHarvestingStrategy(new SimpleHarvestingStrategy());
                 HarvestResult result = player.getCurrentGame().getHarvestingStrategy().harvest(firstField, player);
                 player.getCoins().addAll(result.getHarvestedCards());
 //                System.out.println("[" + player.getName() + "] harvests " + firstField.getBeans().size() + " " + firstField.getBeans().get(0).getBeanType().getName() + "(s) and gains " + result.getCoins() + " coins.");

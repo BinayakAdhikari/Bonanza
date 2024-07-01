@@ -214,8 +214,9 @@ public class Game {
 
         // Check and handle Bean Mafia Bosses' fields
         for (BeanMafiaBoss boss : beanMafiaBosses) {
+            harvestingStrategy = new MafiaBossHarvestingStrategy();
             System.out.println("MAFIA [" + boss.getName() + "] current field size: " + boss.getField().size());
-            harvestingStrategy.harvestMafia(boss, deck);
+            harvestingStrategy.harvest(boss, deck);
         }
 
         currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
@@ -279,6 +280,10 @@ public class Game {
 
     public List<BeanMafiaBoss> getBeanMafiaBosses() {
         return beanMafiaBosses;
+    }
+
+    public void setHarvestingStrategy(HarvestingStrategy harvestingStrategy) {
+        this.harvestingStrategy = harvestingStrategy;
     }
 
     public static void main(String[] args) {

@@ -55,16 +55,4 @@ public class BeanMafiaBoss {
         field.clear();
     }
 
-    public void harvest(List<Card> discardPile) {
-        System.out.println("MAFIA [" + name + "] checking if should harvest. Current field size: " + field.size() + ", threshold: " + harvestThreshold);
-        if (shouldHarvest()) {
-            int coinsEarned = calculateCoins(field.size());
-            addCoins(coinsEarned);
-            System.out.println("MAFIA [" + name + "] harvests " + field.size() + " beans and earns " + coinsEarned + " coins. Total coins: " + getCoins());
-            discardPile.addAll(new ArrayList<>(field));
-            clearField();
-        } else {
-            System.out.println("MAFIA [" + name + "] does not meet the threshold for harvesting. Field size: " + field.size());
-        }
-    }
 }

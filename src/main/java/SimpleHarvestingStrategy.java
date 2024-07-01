@@ -13,8 +13,8 @@ public class SimpleHarvestingStrategy implements HarvestingStrategy {
     }
 
     @Override
-    public void harvestMafia(BeanMafiaBoss boss, Deck deck) {
-        boss.harvest(deck.getDiscardPile());
+    public void harvest(BeanMafiaBoss boss, Deck deck) {
+
     }
 
     private int calculateCoins(int numBeans) {
