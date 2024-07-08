@@ -1,0 +1,141 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Market</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Market (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Market</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (2/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    66.7%
+  </span>
+  <span class="absValue">
+    (4/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (10/10)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.util.List;
+&nbsp;
+&nbsp;public class Market {
+&nbsp;    private List&lt;Player&gt; players;
+&nbsp;
+<b class="fc">&nbsp;    public Market(List&lt;Player&gt; players) {</b>
+<b class="fc">&nbsp;        this.players = players;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void trade(Player currentPlayer) {
+<b class="fc">&nbsp;        System.out.println(&quot;[&quot; + currentPlayer.getName() + &quot;] is trading...&quot;);</b>
+&nbsp;        // Implement trade logic here
+&nbsp;        // Example: trade first card from currentPlayer&#39;s hand with the first card from the next player&#39;s hand
+<b class="pc">&nbsp;        for (Player player : players) {</b>
+<b class="pc">&nbsp;            if (player != currentPlayer &amp;&amp; !player.getHand().isEmpty()) {</b>
+<b class="fc">&nbsp;                Card currentPlayerCard = currentPlayer.getHand().remove(0);</b>
+<b class="fc">&nbsp;                Card playerCard = player.getHand().remove(0);</b>
+<b class="fc">&nbsp;                currentPlayer.getHand().add(playerCard);</b>
+<b class="fc">&nbsp;                player.getHand().add(currentPlayerCard);</b>
+<b class="fc">&nbsp;                System.out.println(&quot;[&quot; + currentPlayer.getName() + &quot;] trades &quot; + currentPlayerCard.getBeanType().getName() + &quot; with &quot; + player.getName() + &quot; for &quot; + playerCard.getBeanType().getName());</b>
+&nbsp;                break;
+&nbsp;            }
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-08 11:33</div>
+</div>
+</body>
+</html>

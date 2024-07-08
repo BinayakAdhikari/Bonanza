@@ -1,0 +1,400 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > Game</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Game (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Game</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (15/18)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (42/42)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    97.7%
+  </span>
+  <span class="absValue">
+    (169/173)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.util.*;
+&nbsp;import java.util.logging.Logger;
+&nbsp;
+&nbsp;public class Game {
+<b class="fc">&nbsp;    private static final Logger logger = Logger.getLogger(Game.class.getName());</b>
+&nbsp;
+&nbsp;    private List&lt;Player&gt; players;
+&nbsp;    private Deck deck;
+&nbsp;    private int currentPlayerIndex;
+&nbsp;    private int roundCount;
+&nbsp;    private int drawPileReshuffles;
+&nbsp;    private List&lt;GamePhaseStrategy&gt; phases;
+&nbsp;    private PlantingStrategy plantingStrategy;
+&nbsp;    private HarvestingStrategy harvestingStrategy;
+&nbsp;    private List&lt;BeanMafiaBoss&gt; beanMafiaBosses;
+&nbsp;
+<b class="fc">&nbsp;    public Game() {</b>
+<b class="fc">&nbsp;        this.phases = Arrays.asList(</b>
+&nbsp;                new PlantBeanPhase(),
+&nbsp;                new TurnOverAndTradePhase(),
+&nbsp;                new PlantTurnedOverAndTradedPhase(),
+&nbsp;                new DrawBeanCardsPhase()
+&nbsp;        );
+<b class="fc">&nbsp;        this.roundCount = 0;</b>
+<b class="fc">&nbsp;        this.drawPileReshuffles = 0;</b>
+<b class="fc">&nbsp;        this.plantingStrategy = new SimplePlantingStrategy();</b>
+<b class="fc">&nbsp;        this.harvestingStrategy = new SimpleHarvestingStrategy();</b>
+<b class="fc">&nbsp;        this.beanMafiaBosses = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        initializeBeanMafiaBosses();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void initializeBeanMafiaBosses() {
+<b class="fc">&nbsp;        beanMafiaBosses.add(new BeanMafiaBoss(&quot;Al Cabohne&quot;, 3));</b>
+<b class="fc">&nbsp;        beanMafiaBosses.add(new BeanMafiaBoss(&quot;Don Corlebohne&quot;, 2));</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setupGame() {
+<b class="fc">&nbsp;        System.out.println(&quot;Setting up the game...&quot;);</b>
+&nbsp;
+&nbsp;        // Create Beans and Beanometers
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; blueBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        blueBeanometerMap.put(4, 1);</b>
+<b class="fc">&nbsp;        blueBeanometerMap.put(6, 2);</b>
+<b class="fc">&nbsp;        blueBeanometerMap.put(8, 3);</b>
+<b class="fc">&nbsp;        blueBeanometerMap.put(10, 4);</b>
+<b class="fc">&nbsp;        Beanometer blueBeanometer = new Beanometer(blueBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType blueBean = new BeanType(&quot;BLAUE_BOHNE&quot;, blueBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; stinkBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        stinkBeanometerMap.put(3, 1);</b>
+<b class="fc">&nbsp;        stinkBeanometerMap.put(5, 2);</b>
+<b class="fc">&nbsp;        stinkBeanometerMap.put(7, 3);</b>
+<b class="fc">&nbsp;        stinkBeanometerMap.put(8, 4);</b>
+<b class="fc">&nbsp;        Beanometer stinkBeanometer = new Beanometer(stinkBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType stinkBean = new BeanType(&quot;SAU_BOHNE&quot;, stinkBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; greenBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        greenBeanometerMap.put(3, 1);</b>
+<b class="fc">&nbsp;        greenBeanometerMap.put(5, 2);</b>
+<b class="fc">&nbsp;        greenBeanometerMap.put(6, 3);</b>
+<b class="fc">&nbsp;        greenBeanometerMap.put(7, 4);</b>
+<b class="fc">&nbsp;        Beanometer greenBeanometer = new Beanometer(greenBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType greenBean = new BeanType(&quot;BRECH_BOHNE&quot;, greenBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; soyBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        soyBeanometerMap.put(2, 1);</b>
+<b class="fc">&nbsp;        soyBeanometerMap.put(4, 2);</b>
+<b class="fc">&nbsp;        soyBeanometerMap.put(6, 3);</b>
+<b class="fc">&nbsp;        soyBeanometerMap.put(7, 4);</b>
+<b class="fc">&nbsp;        Beanometer soyBeanometer = new Beanometer(soyBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType soyBean = new BeanType(&quot;SOJA_BOHNE&quot;, soyBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; blackEyedBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        blackEyedBeanometerMap.put(2, 1);</b>
+<b class="fc">&nbsp;        blackEyedBeanometerMap.put(4, 2);</b>
+<b class="fc">&nbsp;        blackEyedBeanometerMap.put(5, 3);</b>
+<b class="fc">&nbsp;        blackEyedBeanometerMap.put(6, 4);</b>
+<b class="fc">&nbsp;        Beanometer blackEyedBeanometer = new Beanometer(blackEyedBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType blackEyedBean = new BeanType(&quot;AUGEN_BOHNE&quot;, blackEyedBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; redBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        redBeanometerMap.put(2, 1);</b>
+<b class="fc">&nbsp;        redBeanometerMap.put(3, 2);</b>
+<b class="fc">&nbsp;        redBeanometerMap.put(4, 3);</b>
+<b class="fc">&nbsp;        redBeanometerMap.put(5, 4);</b>
+<b class="fc">&nbsp;        Beanometer redBeanometer = new Beanometer(redBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType redBean = new BeanType(&quot;ROTE_BOHNE&quot;, redBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; gardenBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        gardenBeanometerMap.put(2, 1);</b>
+<b class="fc">&nbsp;        gardenBeanometerMap.put(3, 2);</b>
+<b class="fc">&nbsp;        gardenBeanometerMap.put(4, 3);</b>
+<b class="fc">&nbsp;        gardenBeanometerMap.put(5, 4);</b>
+<b class="fc">&nbsp;        Beanometer gardenBeanometer = new Beanometer(gardenBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType gardenBean = new BeanType(&quot;GARTEN_BOHNE&quot;, gardenBeanometer);</b>
+&nbsp;
+&nbsp;        // Add beans from Al Cabohne extension
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; kidneyBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        kidneyBeanometerMap.put(4, 1);</b>
+<b class="fc">&nbsp;        kidneyBeanometerMap.put(7, 2);</b>
+<b class="fc">&nbsp;        kidneyBeanometerMap.put(9, 3);</b>
+<b class="fc">&nbsp;        kidneyBeanometerMap.put(11, 4);</b>
+<b class="fc">&nbsp;        Beanometer kidneyBeanometer = new Beanometer(kidneyBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType kidneyBean = new BeanType(&quot;KIDNEY_BOHNE&quot;, kidneyBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; fireBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        fireBeanometerMap.put(3, 1);</b>
+<b class="fc">&nbsp;        fireBeanometerMap.put(6, 2);</b>
+<b class="fc">&nbsp;        fireBeanometerMap.put(8, 3);</b>
+<b class="fc">&nbsp;        fireBeanometerMap.put(10, 4);</b>
+<b class="fc">&nbsp;        Beanometer fireBeanometer = new Beanometer(fireBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType fireBean = new BeanType(&quot;FEUER_BOHNE&quot;, fireBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; puffBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        puffBeanometerMap.put(2, 1);</b>
+<b class="fc">&nbsp;        puffBeanometerMap.put(4, 2);</b>
+<b class="fc">&nbsp;        puffBeanometerMap.put(6, 3);</b>
+<b class="fc">&nbsp;        puffBeanometerMap.put(8, 4);</b>
+<b class="fc">&nbsp;        Beanometer puffBeanometer = new Beanometer(puffBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType puffBean = new BeanType(&quot;PUFF_BOHNE&quot;, puffBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; broadBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        broadBeanometerMap.put(3, 1);</b>
+<b class="fc">&nbsp;        broadBeanometerMap.put(5, 2);</b>
+<b class="fc">&nbsp;        broadBeanometerMap.put(7, 3);</b>
+<b class="fc">&nbsp;        broadBeanometerMap.put(9, 4);</b>
+<b class="fc">&nbsp;        Beanometer broadBeanometer = new Beanometer(broadBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType broadBean = new BeanType(&quot;WEINBRAND_BOHNE&quot;, broadBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; frenchBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        frenchBeanometerMap.put(4, 1);</b>
+<b class="fc">&nbsp;        frenchBeanometerMap.put(6, 2);</b>
+<b class="fc">&nbsp;        frenchBeanometerMap.put(8, 3);</b>
+<b class="fc">&nbsp;        frenchBeanometerMap.put(10, 4);</b>
+<b class="fc">&nbsp;        Beanometer frenchBeanometer = new Beanometer(frenchBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType frenchBean = new BeanType(&quot;COGNAC_BOHNE&quot;, frenchBeanometer);</b>
+&nbsp;
+<b class="fc">&nbsp;        Map&lt;Integer, Integer&gt; runnerBeanometerMap = new HashMap&lt;&gt;();</b>
+<b class="fc">&nbsp;        runnerBeanometerMap.put(2, 1);</b>
+<b class="fc">&nbsp;        runnerBeanometerMap.put(4, 2);</b>
+<b class="fc">&nbsp;        runnerBeanometerMap.put(6, 3);</b>
+<b class="fc">&nbsp;        runnerBeanometerMap.put(8, 4);</b>
+<b class="fc">&nbsp;        Beanometer runnerBeanometer = new Beanometer(runnerBeanometerMap);</b>
+<b class="fc">&nbsp;        BeanType runnerBean = new BeanType(&quot;STANGEN_BOHNE&quot;, runnerBeanometer);</b>
+&nbsp;
+&nbsp;        // Create Cards
+<b class="fc">&nbsp;        List&lt;Card&gt; cards = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 20; i++) cards.add(new Card(blueBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 16; i++) cards.add(new Card(stinkBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 14; i++) cards.add(new Card(greenBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 12; i++) cards.add(new Card(soyBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 10; i++) cards.add(new Card(blackEyedBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 8; i++) cards.add(new Card(redBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 6; i++) cards.add(new Card(gardenBean));</b>
+&nbsp;        // Add cards for new beans
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 20; i++) cards.add(new Card(kidneyBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 18; i++) cards.add(new Card(fireBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 16; i++) cards.add(new Card(puffBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 14; i++) cards.add(new Card(broadBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 12; i++) cards.add(new Card(frenchBean));</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; 10; i++) cards.add(new Card(runnerBean));</b>
+&nbsp;
+&nbsp;        // Create Players
+<b class="fc">&nbsp;        players = new ArrayList&lt;&gt;();</b>
+<b class="fc">&nbsp;        players.add(new Player(&quot;Player 1&quot;, plantingStrategy, harvestingStrategy, this));</b>
+<b class="fc">&nbsp;        players.add(new Player(&quot;Player 2&quot;, plantingStrategy, harvestingStrategy, this));</b>
+<b class="fc">&nbsp;        players.add(new Player(&quot;Player 3&quot;, plantingStrategy, harvestingStrategy, this));</b>
+&nbsp;
+&nbsp;        // Initialize deck
+<b class="fc">&nbsp;        ShufflingStrategy shufflingStrategy = new RandomShuffleStrategy();</b>
+<b class="fc">&nbsp;        deck = new Deck(cards, shufflingStrategy, this);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void startGame() {
+<b class="fc">&nbsp;        setupGame();</b>
+&nbsp;
+<b class="fc">&nbsp;        new Thread(new UserInterface(players)).start();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (Player player : players) {</b>
+<b class="fc">&nbsp;            player.drawCards(5, deck);</b>
+<b class="fc">&nbsp;            System.out.println(player.getName() + &quot; has drawn initial 5 cards.&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        while (!isGameOver()) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;\n--- New Turn ---&quot;);</b>
+<b class="fc">&nbsp;            System.out.println(&quot;Current Player: &quot; + players.get(currentPlayerIndex).getName());</b>
+<b class="fc">&nbsp;            nextTurn();</b>
+<b class="fc">&nbsp;            System.out.println(&quot;--- Turn Ended ---\n&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        endGame();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void nextTurn() {
+<b class="fc">&nbsp;        Player currentPlayer = players.get(currentPlayerIndex);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;\n--- New Turn ---&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Current Player: &quot; + currentPlayer.getName());</b>
+&nbsp;
+<b class="fc">&nbsp;        for (GamePhaseStrategy phase : phases) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;\nExecuting phase: &quot; + phase.getClass().getSimpleName() + &quot; for player: &quot; + currentPlayer.getName());</b>
+<b class="fc">&nbsp;            phase.execute(currentPlayer, this);</b>
+<b class="fc">&nbsp;            System.out.println(&quot;Phase: &quot; + phase.getClass().getSimpleName() + &quot; completed.&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Ensure to check and give beans to Mafia at appropriate phase
+<b class="fc">&nbsp;        currentPlayer.checkAndGiveBeanToAllMafias(beanMafiaBosses);</b>
+&nbsp;
+&nbsp;        // Check and handle Bean Mafia Bosses&#39; fields
+<b class="fc">&nbsp;        for (BeanMafiaBoss boss : beanMafiaBosses) {</b>
+<b class="fc">&nbsp;            harvestingStrategy = new MafiaBossHarvestingStrategy();</b>
+<b class="fc">&nbsp;            System.out.println(&quot;MAFIA [&quot; + boss.getName() + &quot;] current field size: &quot; + boss.getField().size());</b>
+<b class="fc">&nbsp;            harvestingStrategy.harvest(boss, deck);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        currentPlayerIndex = (currentPlayerIndex + 1) % players.size();</b>
+<b class="fc">&nbsp;        roundCount++;</b>
+<b class="fc">&nbsp;        System.out.println(&quot;Round &quot; + roundCount + &quot; completed.&quot;);</b>
+<b class="fc">&nbsp;        System.out.println(currentPlayer.getName() + &quot; now has &quot; + currentPlayer.calculateCoins() + &quot; coins.&quot;);</b>
+&nbsp;
+&nbsp;        // Log the total coins for each Mafia boss at the end of the turn
+<b class="fc">&nbsp;        for (BeanMafiaBoss boss : beanMafiaBosses) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;MAFIA [&quot; + boss.getName() + &quot;] has &quot; + boss.getCoins() + &quot; coins.&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        System.out.println(&quot;--- Turn Ended ---\n&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void endGame() {
+<b class="fc">&nbsp;        Player winner = declareWinner();</b>
+<b class="fc">&nbsp;        System.out.println(&quot;The winner is: &quot; + winner.getName());</b>
+<b class="fc">&nbsp;        for (Player player : players) {</b>
+<b class="fc">&nbsp;            System.out.println(player.getName() + &quot; collected &quot; + player.calculateCoins() + &quot; coins.&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Log the final coins for each Mafia boss at the end of the game
+<b class="fc">&nbsp;        for (BeanMafiaBoss boss : beanMafiaBosses) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;MAFIA [&quot; + boss.getName() + &quot;] final coins: &quot; + boss.getCoins());</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public Player declareWinner() {
+<b class="fc">&nbsp;        return players.stream()</b>
+<b class="fc">&nbsp;                .max(Comparator.comparingInt(Player::calculateCoins))</b>
+<b class="fc">&nbsp;                .orElse(null);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public boolean isGameOver() {
+<b class="fc">&nbsp;        return drawPileReshuffles &gt;= 3;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void incrementReshuffleCount() {
+<b class="fc">&nbsp;        drawPileReshuffles++;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getDrawPileReshuffles() {
+<b class="fc">&nbsp;        return drawPileReshuffles;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public Deck getDeck() {
+<b class="fc">&nbsp;        return deck;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;Player&gt; getPlayers() {
+<b class="fc">&nbsp;        return players;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public PlantingStrategy getPlantingStrategy() {
+<b class="nc">&nbsp;        return plantingStrategy;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public HarvestingStrategy getHarvestingStrategy() {
+<b class="fc">&nbsp;        return harvestingStrategy;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public List&lt;BeanMafiaBoss&gt; getBeanMafiaBosses() {
+<b class="nc">&nbsp;        return beanMafiaBosses;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setHarvestingStrategy(HarvestingStrategy harvestingStrategy) {
+<b class="fc">&nbsp;        this.harvestingStrategy = harvestingStrategy;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+<b class="nc">&nbsp;        Game game = new Game();</b>
+<b class="nc">&nbsp;        game.startGame();</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-08 11:33</div>
+</div>
+</body>
+</html>

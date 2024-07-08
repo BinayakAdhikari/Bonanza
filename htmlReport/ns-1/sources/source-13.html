@@ -1,0 +1,428 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=windows-1252"> 
+  <title>Coverage Report > UserInterface</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: UserInterface (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Branch, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">UserInterface</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    5.4%
+  </span>
+  <span class="absValue">
+    (2/37)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/4)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    4.1%
+  </span>
+  <span class="absValue">
+    (5/122)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import io.bitbucket.plt.sdp.bohnanza.gui.*;
+&nbsp;
+&nbsp;import java.util.ArrayList;
+&nbsp;import java.util.List;
+&nbsp;import java.util.Scanner;
+&nbsp;import java.util.concurrent.Executors;
+&nbsp;import java.util.concurrent.ScheduledExecutorService;
+&nbsp;import java.util.concurrent.TimeUnit;
+&nbsp;import java.util.stream.Collectors;
+&nbsp;
+&nbsp;public class UserInterface implements Runnable{
+<b class="fc">&nbsp;    private final Scanner scanner = new Scanner(System.in);</b>
+&nbsp;
+<b class="fc">&nbsp;    List&lt;Player&gt; players = new ArrayList&lt;Player&gt;();</b>
+&nbsp;    private GUI gui;
+&nbsp;
+&nbsp;    private Compartment player1Field1;
+&nbsp;    private Compartment player1Field2;
+&nbsp;    private Compartment player1Field3;
+&nbsp;    private Compartment player2Field1;
+&nbsp;    private Compartment player2Field2;
+&nbsp;    private Compartment player2Field3;
+&nbsp;    private Compartment player3Field1;
+&nbsp;    private Compartment player3Field2;
+&nbsp;    private Compartment player3Field3;
+&nbsp;    private Compartment player1HandPile;
+&nbsp;    private Compartment player2HandPile;
+&nbsp;    private Compartment player3HandPile;
+&nbsp;    private Compartment tradeOfferPile;
+&nbsp;    private Compartment turnOverPile;
+&nbsp;    private Compartment tradedPile;
+&nbsp;
+&nbsp;    private Label field1Lbl;
+&nbsp;    private Label field2Lbl;
+&nbsp;    private Label field3Lbl;
+&nbsp;    private Label player1DollarEarned;
+&nbsp;    private Label player2DollarEarned;
+&nbsp;    private Label player3DollarEarned;
+&nbsp;    private Label currentPhaseLbl;
+&nbsp;    private Label drawPileLbl;
+&nbsp;    private Label discardPileLbl;
+&nbsp;
+<b class="fc">&nbsp;    public UserInterface(List&lt;Player&gt; players) {</b>
+<b class="fc">&nbsp;        this.players = players;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public void run() {
+<b class="fc">&nbsp;        this.gui = new GUI(new Size(1800, 900), new Size(55, 90), new Size(55, 90), new Color(150,150,150), new Color(30,0,0));</b>
+&nbsp;
+<b class="nc">&nbsp;        initButtons();</b>
+&nbsp;
+&nbsp;//        //Static labels
+<b class="nc">&nbsp;        gui.addLabel(new Coordinate(50, 820), &quot;Player Name: &quot; + players.get(0).getName());</b>
+<b class="nc">&nbsp;        gui.addLabel(new Coordinate(600, 820), &quot;Player Name: &quot; + players.get(1).getName());</b>
+<b class="nc">&nbsp;        gui.addLabel(new Coordinate(1150, 820), &quot;Player Name: &quot; + players.get(2).getName());</b>
+&nbsp;//        gui.addLabel(new Coordinate(110, 820), &quot;Hand Pile&quot;);
+&nbsp;//        gui.addLabel(new Coordinate(200, 820), &quot;Trade Offer&quot;);
+&nbsp;//        gui.addLabel(new Coordinate(310, 820), &quot;Turn Over Pile&quot;);
+&nbsp;//        gui.addLabel(new Coordinate(410, 820), &quot;Traded Pile&quot;);
+&nbsp;//
+&nbsp;//        //Static Compartment for First Field Image
+<b class="nc">&nbsp;        gui.addCompartment(new Coordinate(50, 500), new Size(440, 220), &quot;&quot;, &quot;BOHNENFELD_ALLE&quot;);</b>
+&nbsp;
+&nbsp;        //Static Compartment for Second Field Image
+<b class="nc">&nbsp;        gui.addCompartment(new Coordinate(600, 500), new Size(440, 220), &quot;&quot;, &quot;BOHNENFELD_ALLE&quot;);</b>
+&nbsp;
+&nbsp;        //Static Compartment for Third Field Image
+<b class="nc">&nbsp;        gui.addCompartment(new Coordinate(1150, 500), new Size(440, 220), &quot;&quot;, &quot;BOHNENFELD_ALLE&quot;);</b>
+&nbsp;//
+&nbsp;//        // a label that will be used to show information on a dragged&#39;n&#39;dropped card
+&nbsp;//        field1Lbl = gui.addLabel(new Coordinate(241, 7), &quot;None&quot;);
+&nbsp;//        field2Lbl = gui.addLabel(new Coordinate(384, 7), &quot;None&quot;);
+&nbsp;//        field3Lbl = gui.addLabel(new Coordinate(530, 7), &quot;None&quot;);
+&nbsp;//
+&nbsp;        // a label that shows dollar earned by the playes
+<b class="nc">&nbsp;        player1DollarEarned = gui.addLabel(new Coordinate(300, 820), &quot;Dollar Earned: &quot;);</b>
+<b class="nc">&nbsp;        player2DollarEarned = gui.addLabel(new Coordinate(800, 820), &quot;Dollar Earned: &quot;);</b>
+<b class="nc">&nbsp;        player3DollarEarned = gui.addLabel(new Coordinate(1450, 820), &quot;Dollar Earned: &quot;);</b>
+&nbsp;
+&nbsp;        // a label that shows the current phase of the game
+<b class="nc">&nbsp;        currentPhaseLbl = gui.addLabel(new Coordinate(10, 150), &quot;Current Phase: &quot;);</b>
+<b class="nc">&nbsp;        drawPileLbl = gui.addLabel(new Coordinate(10, 190), &quot;DrawPile Count: &quot;);</b>
+<b class="nc">&nbsp;        discardPileLbl = gui.addLabel(new Coordinate(10, 230), &quot;DiscardPile Count: &quot;);</b>
+&nbsp;//
+<b class="nc">&nbsp;        player1Field1 = gui.addCompartment(new Coordinate(50, 500), new Size(150, 220), &quot;&quot;);</b>
+<b class="nc">&nbsp;        player1Field2 = gui.addCompartment(new Coordinate(200, 500), new Size(150, 220), &quot;&quot;);</b>
+<b class="nc">&nbsp;        player1Field3 = gui.addCompartment(new Coordinate(350, 500), new Size(140, 220), &quot;&quot;);</b>
+&nbsp;
+&nbsp;        //fields for player 2
+<b class="nc">&nbsp;        player2Field1 = gui.addCompartment(new Coordinate(600, 500), new Size(150, 220), &quot;&quot;);</b>
+<b class="nc">&nbsp;        player2Field2 = gui.addCompartment(new Coordinate(750, 500), new Size(150, 220), &quot;&quot;);</b>
+<b class="nc">&nbsp;        player2Field3 = gui.addCompartment(new Coordinate(900, 500), new Size(140, 220), &quot;&quot;);</b>
+&nbsp;
+&nbsp;        //fields for player 3
+<b class="nc">&nbsp;        player3Field1 = gui.addCompartment(new Coordinate(1150, 500), new Size(150, 220), &quot;&quot;);</b>
+<b class="nc">&nbsp;        player3Field2 = gui.addCompartment(new Coordinate(1300, 500), new Size(150, 220), &quot;&quot;);</b>
+<b class="nc">&nbsp;        player3Field3 = gui.addCompartment(new Coordinate(1450, 500), new Size(140, 220), &quot;&quot;);</b>
+&nbsp;
+<b class="nc">&nbsp;        player1HandPile = gui.addCompartment(new Coordinate(50, 309), new Size(385, 100), &quot;Player 1 Hand Pile&quot;);</b>
+<b class="nc">&nbsp;        player2HandPile = gui.addCompartment(new Coordinate(600, 309), new Size(385, 100), &quot;Player 2 Hand Pile&quot;);</b>
+<b class="nc">&nbsp;        player3HandPile = gui.addCompartment(new Coordinate(1150, 309), new Size(385, 100), &quot;Player 3 Hand Pile&quot;);</b>
+&nbsp;//        tradeOfferPile = gui.addCompartment(new Coordinate(405, 309), new Size(385, 100), &quot;&quot;);
+&nbsp;//        turnOverPile = gui.addCompartment(new Coordinate(10, 462), new Size(385, 100), &quot;&quot;);
+&nbsp;//        tradedPile = gui.addCompartment(new Coordinate(405, 462), new Size(385, 100), &quot;&quot;);
+&nbsp;
+&nbsp;//        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+&nbsp;//        scheduler.scheduleAtFixedRate(this::updateCards, 0, 1, TimeUnit.SECONDS);
+&nbsp;
+<b class="nc">&nbsp;        gui.start();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private void initButtons(){
+<b class="nc">&nbsp;        int btnWidth = 70;</b>
+<b class="nc">&nbsp;        int btnHeight = 25;</b>
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Restart&quot;, new Coordinate(10, 14), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Exit&quot;, new Coordinate(1690, 14), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            gui.stop();</b>
+<b class="nc">&nbsp;            System.exit(0);</b>
+&nbsp;        });
+&nbsp;
+&nbsp;        // buttons for first field image
+<b class="nc">&nbsp;        gui.addButton(&quot;Harvest&quot;, new Coordinate(100, 750), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Harvest from field 0&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Harvest&quot;, new Coordinate(250, 750), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Harvest from field 1&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Harvest&quot;, new Coordinate(400, 750), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Harvest from field 2&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Plant&quot;, new Coordinate(100, 414), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Plant&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Draw&quot;, new Coordinate(200, 460), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Draw&quot;);</b>
+<b class="nc">&nbsp;            this.updateCards();</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Trade&quot;, new Coordinate(500, 600), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Clear&quot;, new Coordinate(500, 650), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Clear Trade Offer&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Plant&quot;, new Coordinate(250, 414), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Turn&quot;, new Coordinate(300, 460), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+<b class="nc">&nbsp;            updateCards();</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Plant&quot;, new Coordinate(400, 414), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+&nbsp;        // buttons for second field image
+<b class="nc">&nbsp;        gui.addButton(&quot;Harvest&quot;, new Coordinate(650, 750), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Harvest from field 0&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Harvest&quot;, new Coordinate(800, 750), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Harvest from field 1&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Harvest&quot;, new Coordinate(950, 750), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Harvest from field 2&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Plant&quot;, new Coordinate(650, 414), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Plant&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Draw&quot;, new Coordinate(750, 460), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Draw&quot;);</b>
+<b class="nc">&nbsp;            this.updateCards();</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Trade&quot;, new Coordinate(1050, 600), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Clear&quot;, new Coordinate(1050, 650), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Clear Trade Offer&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Plant&quot;, new Coordinate(800, 414), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Turn&quot;, new Coordinate(850, 460), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Plant&quot;, new Coordinate(950, 414), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+&nbsp;        // buttons for third field image
+<b class="nc">&nbsp;        gui.addButton(&quot;Harvest&quot;, new Coordinate(1200, 750), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Harvest from field 0&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Harvest&quot;, new Coordinate(1350, 750), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Harvest from field 1&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Harvest&quot;, new Coordinate(1500, 750), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Harvest from field 2&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Plant&quot;, new Coordinate(1200, 414), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Plant&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Draw&quot;, new Coordinate(1300, 460), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Draw&quot;);</b>
+<b class="nc">&nbsp;            this.updateCards();</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Trade&quot;, new Coordinate(1600, 600), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Clear&quot;, new Coordinate(1600, 650), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Clear Trade Offer&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Plant&quot;, new Coordinate(1350, 414), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Turn&quot;, new Coordinate(1400, 460), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;
+<b class="nc">&nbsp;        gui.addButton(&quot;Plant&quot;, new Coordinate(1500, 414), new Size(btnWidth, btnHeight), button -&gt; {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;Restart Game&quot;);</b>
+&nbsp;        });
+&nbsp;    }
+&nbsp;
+&nbsp;    private void updateCards(){
+&nbsp;//        field1Lbl.updateLabel(&quot;new value&quot;);
+&nbsp;//        field2Lbl.updateLabel(&quot;new value&quot;);
+&nbsp;//        field3Lbl.updateLabel(&quot;new value&quot;);
+&nbsp;
+&nbsp;//        player1DollarEarned.updateLabel(&quot;Dollar Earned: &quot; + 0);
+&nbsp;//        currentPhaseLbl.updateLabel(&quot;Current Phase: &quot; + &quot;Planting&quot;);
+&nbsp;//        drawPileLbl.updateLabel(&quot;DrawPile Count: &quot; + 0);
+&nbsp;//        discardPileLbl.updateLabel(&quot;DiscardPile Count: &quot; + 0);
+&nbsp;
+&nbsp;        //Update Piles
+&nbsp;//        refreshCompartment(player1Field1, new String[]{&quot;AUGEN_BOHNE&quot;, &quot;GARTEN_BOHNE&quot;}, new Coordinate(52, 630));
+&nbsp;//        refreshCompartment(player1Field2, new String[]{&quot;AUGEN_BOHNE&quot;, &quot;GARTEN_BOHNE&quot;}, new Coordinate(327, 27));
+&nbsp;//        refreshCompartment(player1Field3, new String[]{&quot;AUGEN_BOHNE&quot;, &quot;GARTEN_BOHNE&quot;}, new Coordinate(474, 27));
+&nbsp;
+<b class="nc">&nbsp;        refreshCompartment(player1HandPile, players.get(0).getHand().stream()</b>
+<b class="nc">&nbsp;                .map(card -&gt; card.getBeanType().getName())</b>
+<b class="nc">&nbsp;                .toList().toArray(new String[0]), new Coordinate(50, 309));</b>
+<b class="nc">&nbsp;        refreshCompartment(player2HandPile, players.get(1).getHand().stream()</b>
+<b class="nc">&nbsp;                .map(card -&gt; card.getBeanType().getName())</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList()).toArray(new String[0]), new Coordinate(600, 309));</b>
+<b class="nc">&nbsp;        refreshCompartment(player3HandPile, players.get(2).getHand().stream()</b>
+<b class="nc">&nbsp;                .map(card -&gt; card.getBeanType().getName())</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList()).toArray(new String[0]), new Coordinate(1150, 309));</b>
+&nbsp;
+<b class="nc">&nbsp;        refreshCompartment(player1Field1, players.get(0).getFields().get(0).getBeans().stream()</b>
+<b class="nc">&nbsp;                .map(card -&gt; card.getBeanType().getName())</b>
+<b class="nc">&nbsp;                .collect(Collectors.toList()).toArray(new String[0]), new Coordinate(50, 500));</b>
+&nbsp;
+&nbsp;
+&nbsp;//        refreshCompartment(tradeOfferPile, new String[]{&quot;AUGEN_BOHNE&quot;, &quot;GARTEN_BOHNE&quot;}, new Coordinate(405, 309));
+&nbsp;//        refreshCompartment(turnOverPile, new String[]{&quot;AUGEN_BOHNE&quot;, &quot;GARTEN_BOHNE&quot;}, new Coordinate(10, 462));
+&nbsp;//        refreshCompartment(tradedPile, new String[]{&quot;AUGEN_BOHNE&quot;, &quot;GARTEN_BOHNE&quot;}, new Coordinate(405, 462));
+&nbsp;//
+&nbsp;//        player1Field1.distributeVertical(gui.getCardObjectsInCompartment(player1Field1));
+&nbsp;//        player1Field2.distributeVertical(gui.getCardObjectsInCompartment(player1Field2));
+&nbsp;//        player1Field3.distributeVertical(gui.getCardObjectsInCompartment(player1Field3));
+&nbsp;//
+<b class="nc">&nbsp;        player1HandPile.distributeHorizontal(gui.getCardObjectsInCompartment(player1HandPile));</b>
+<b class="nc">&nbsp;        player2HandPile.distributeHorizontal(gui.getCardObjectsInCompartment(player1HandPile));</b>
+<b class="nc">&nbsp;        player3HandPile.distributeHorizontal(gui.getCardObjectsInCompartment(player1HandPile));</b>
+&nbsp;//        //tradeOfferPile.distributeHorizontal(gui.getCardObjectsInCompartment(tradeOfferPile));
+&nbsp;//        turnOverPile.distributeHorizontal(gui.getCardObjectsInCompartment(turnOverPile));
+&nbsp;//        tradedPile.distributeHorizontal(gui.getCardObjectsInCompartment(tradedPile));
+&nbsp;    }
+&nbsp;
+&nbsp;    private void refreshCompartment(Compartment compartment, String[] cards, Coordinate coordinate){
+&nbsp;        //Remove current all cards from the box
+<b class="nc">&nbsp;        CardObject[] cardObjects = gui.getCardObjectsInCompartment(compartment);</b>
+<b class="nc">&nbsp;        for(CardObject cardObject : cardObjects){</b>
+<b class="nc">&nbsp;            gui.removeCard(cardObject);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        //Add new cards to the box
+<b class="nc">&nbsp;        for(String cardName : cards){</b>
+<b class="nc">&nbsp;            gui.addCard(CardType.valueOf(cardName), coordinate).flip();</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2024-07-08 11:33</div>
+</div>
+</body>
+</html>
