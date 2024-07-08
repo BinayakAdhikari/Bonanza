@@ -97,16 +97,15 @@ public class UserInterface implements Runnable{
         player3Field2 = gui.addCompartment(new Coordinate(1300, 500), new Size(150, 220), "");
         player3Field3 = gui.addCompartment(new Coordinate(1450, 500), new Size(140, 220), "");
 
-        player1HandPile = gui.addCompartment(new Coordinate(50, 309), new Size(385, 100), "");
-        player2HandPile = gui.addCompartment(new Coordinate(600, 309), new Size(385, 100), "");
-        player3HandPile = gui.addCompartment(new Coordinate(1150, 309), new Size(385, 100), "");
+        player1HandPile = gui.addCompartment(new Coordinate(50, 309), new Size(385, 100), "Player 1 Hand Pile");
+        player2HandPile = gui.addCompartment(new Coordinate(600, 309), new Size(385, 100), "Player 2 Hand Pile");
+        player3HandPile = gui.addCompartment(new Coordinate(1150, 309), new Size(385, 100), "Player 3 Hand Pile");
 //        tradeOfferPile = gui.addCompartment(new Coordinate(405, 309), new Size(385, 100), "");
 //        turnOverPile = gui.addCompartment(new Coordinate(10, 462), new Size(385, 100), "");
 //        tradedPile = gui.addCompartment(new Coordinate(405, 462), new Size(385, 100), "");
 
-        // Schedule the task to run every second with an initial delay of 0 seconds
-        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(this::updateCards, 0, 2, TimeUnit.SECONDS);
+//        ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+//        scheduler.scheduleAtFixedRate(this::updateCards, 0, 1, TimeUnit.SECONDS);
 
         gui.start();
     }
@@ -143,6 +142,7 @@ public class UserInterface implements Runnable{
 
         gui.addButton("Draw", new Coordinate(200, 460), new Size(btnWidth, btnHeight), button -> {
             System.out.println("Draw");
+            this.updateCards();
         });
 
         gui.addButton("Trade", new Coordinate(500, 600), new Size(btnWidth, btnHeight), button -> {
@@ -185,6 +185,7 @@ public class UserInterface implements Runnable{
 
         gui.addButton("Draw", new Coordinate(750, 460), new Size(btnWidth, btnHeight), button -> {
             System.out.println("Draw");
+            this.updateCards();
         });
 
         gui.addButton("Trade", new Coordinate(1050, 600), new Size(btnWidth, btnHeight), button -> {
@@ -226,6 +227,7 @@ public class UserInterface implements Runnable{
 
         gui.addButton("Draw", new Coordinate(1300, 460), new Size(btnWidth, btnHeight), button -> {
             System.out.println("Draw");
+            this.updateCards();
         });
 
         gui.addButton("Trade", new Coordinate(1600, 600), new Size(btnWidth, btnHeight), button -> {
@@ -266,7 +268,19 @@ public class UserInterface implements Runnable{
 
         refreshCompartment(player1HandPile, players.get(0).getHand().stream()
                 .map(card -> card.getBeanType().getName())
-                .collect(Collectors.toList()).toArray(new String[0]), new Coordinate(50, 309));
+                .toList().toArray(new String[0]), new Coordinate(50, 309));
+        refreshCompartment(player2HandPile, players.get(1).getHand().stream()
+                .map(card -> card.getBeanType().getName())
+                .collect(Collectors.toList()).toArray(new String[0]), new Coordinate(600, 309));
+        refreshCompartment(player3HandPile, players.get(2).getHand().stream()
+                .map(card -> card.getBeanType().getName())
+                .collect(Collectors.toList()).toArray(new String[0]), new Coordinate(1150, 309));
+
+        refreshCompartment(player1Field1, players.get(0).getFields().get(0).getBeans().stream()
+                .map(card -> card.getBeanType().getName())
+                .collect(Collectors.toList()).toArray(new String[0]), new Coordinate(50, 500));
+
+
 //        refreshCompartment(tradeOfferPile, new String[]{"AUGEN_BOHNE", "GARTEN_BOHNE"}, new Coordinate(405, 309));
 //        refreshCompartment(turnOverPile, new String[]{"AUGEN_BOHNE", "GARTEN_BOHNE"}, new Coordinate(10, 462));
 //        refreshCompartment(tradedPile, new String[]{"AUGEN_BOHNE", "GARTEN_BOHNE"}, new Coordinate(405, 462));
@@ -275,7 +289,9 @@ public class UserInterface implements Runnable{
 //        player1Field2.distributeVertical(gui.getCardObjectsInCompartment(player1Field2));
 //        player1Field3.distributeVertical(gui.getCardObjectsInCompartment(player1Field3));
 //
-//        player1HandPile.distributeHorizontal(gui.getCardObjectsInCompartment(player1HandPile));
+        player1HandPile.distributeHorizontal(gui.getCardObjectsInCompartment(player1HandPile));
+        player2HandPile.distributeHorizontal(gui.getCardObjectsInCompartment(player1HandPile));
+        player3HandPile.distributeHorizontal(gui.getCardObjectsInCompartment(player1HandPile));
 //        //tradeOfferPile.distributeHorizontal(gui.getCardObjectsInCompartment(tradeOfferPile));
 //        turnOverPile.distributeHorizontal(gui.getCardObjectsInCompartment(turnOverPile));
 //        tradedPile.distributeHorizontal(gui.getCardObjectsInCompartment(tradedPile));

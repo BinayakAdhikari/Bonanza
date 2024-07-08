@@ -46,14 +46,6 @@ public class Game {
         Beanometer blueBeanometer = new Beanometer(blueBeanometerMap);
         BeanType blueBean = new BeanType("BLAUE_BOHNE", blueBeanometer);
 
-        Map<Integer, Integer> chiliBeanometerMap = new HashMap<>();
-        chiliBeanometerMap.put(3, 1);
-        chiliBeanometerMap.put(6, 2);
-        chiliBeanometerMap.put(8, 3);
-        chiliBeanometerMap.put(9, 4);
-        Beanometer chiliBeanometer = new Beanometer(chiliBeanometerMap);
-        BeanType chiliBean = new BeanType("Chili Bean", chiliBeanometer);
-
         Map<Integer, Integer> stinkBeanometerMap = new HashMap<>();
         stinkBeanometerMap.put(3, 1);
         stinkBeanometerMap.put(5, 2);
@@ -133,7 +125,7 @@ public class Game {
         broadBeanometerMap.put(7, 3);
         broadBeanometerMap.put(9, 4);
         Beanometer broadBeanometer = new Beanometer(broadBeanometerMap);
-        BeanType broadBean = new BeanType("Broad Bean", broadBeanometer);
+        BeanType broadBean = new BeanType("WEINBRAND_BOHNE", broadBeanometer);
 
         Map<Integer, Integer> frenchBeanometerMap = new HashMap<>();
         frenchBeanometerMap.put(4, 1);
@@ -141,7 +133,7 @@ public class Game {
         frenchBeanometerMap.put(8, 3);
         frenchBeanometerMap.put(10, 4);
         Beanometer frenchBeanometer = new Beanometer(frenchBeanometerMap);
-        BeanType frenchBean = new BeanType("French Bean", frenchBeanometer);
+        BeanType frenchBean = new BeanType("COGNAC_BOHNE", frenchBeanometer);
 
         Map<Integer, Integer> runnerBeanometerMap = new HashMap<>();
         runnerBeanometerMap.put(2, 1);
@@ -149,12 +141,11 @@ public class Game {
         runnerBeanometerMap.put(6, 3);
         runnerBeanometerMap.put(8, 4);
         Beanometer runnerBeanometer = new Beanometer(runnerBeanometerMap);
-        BeanType runnerBean = new BeanType("Runner Bean", runnerBeanometer);
+        BeanType runnerBean = new BeanType("STANGEN_BOHNE", runnerBeanometer);
 
         // Create Cards
         List<Card> cards = new ArrayList<>();
         for (int i = 0; i < 20; i++) cards.add(new Card(blueBean));
-        for (int i = 0; i < 18; i++) cards.add(new Card(chiliBean));
         for (int i = 0; i < 16; i++) cards.add(new Card(stinkBean));
         for (int i = 0; i < 14; i++) cards.add(new Card(greenBean));
         for (int i = 0; i < 12; i++) cards.add(new Card(soyBean));
